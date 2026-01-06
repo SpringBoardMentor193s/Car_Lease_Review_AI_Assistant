@@ -1,14 +1,11 @@
 # Car_Lease_Review_AI_Assistant
-Data Resources
 
-This project uses publicly available data and user-provided documents for analysis.
+## Project Overview
+This project is an AI-driven system that helps users review and understand car lease or auto loan contracts. It extracts key financial terms such as APR, tenure, monthly payments, and penalties, and provides insights to support better decision-making and negotiation.
 
-• Public car lease and auto loan contract samples collected from manufacturer websites, banks, and financial institutions.
+## Data Resources
+This project uses publicly available datasets and user-uploaded documents for analysis.
 
-• User-uploaded car lease and loan agreements in PDF or image format for review and analysis.
-
-• Financial reference information such as lease terms, interest rate definitions, fee structures, and penalties sourced from public finance resources.
-
-• Extracted and derived data including APR, loan term, monthly payment, total cost, mileage limits, early termination fees, and hidden charges.
-
-• All documents are processed securely and used only for contract analysis. No personal data is permanently stored.
+- Public car lease agreement samples  
+- Auto loan contract documents from online legal and consumer resources  
+- User-provided lease or loan PDFs (for testing and evaluation).
