@@ -1,1 +1,178 @@
+Public Lease/Loan Sample Contracts: 
+
+CONSUMER FINANCIAL PROTECTION BUREAU (CFPB) – CONTRACT-RELATED DATA:
+
+1. CFPB AUTO LOAN & LEASE CONSUMER GUIDES
+
+OFFICIAL LINK:
+https://files.consumerfinance.gov/f/documents/cfpb_auto_loan_guide.pdf
+
+Data Present:
+- Structure of auto loan and lease agreements
+- Definitions of financial terms:
+   a) APR (Annual Percentage Rate)
+   b) Monthly payment
+   c) Loan/lease term
+   d) Down payment
+   e) Total cost of financing
+- Sample disclosure-style contract languag
+- Common fees and charges in auto finance contracts
+
+Use in Project:
+- Reference for identifying financial clauses
+- Helps train LLM to recognize contract terms
+- Improves explanation of clauses to consumers
+
+
+2. CFPB AUTO LOAN SHOPPING WORKSHEET
+
+Official Link:
+https://files.consumerfinance.gov/f/documents/cfpb_auto_loan_worksheet.pdf
+
+Data Present:
+- Structured comparison fields
+   a) Interest rate
+   b) Monthly payment
+   c) Loan duration
+   d) Total loan cost
+- Tabular format for comparing multiple loan offers
+
+Use in Project:
+- Helps validate extracted SLA fields
+- Used to design contract comparison dashboard
+- Supports fairness analysis between offers
+
+3. CFPB CONSUMER LEASING ACT (REGULATION M)
+
+Official Link:
+https://files.consumerfinance.gov/f/documents/102012_cfpb_consumer-leasing-act_procedures.pdf
+
+Data Present:
+- Legal definitions of lease-specific clauses
+- Mandatory lease disclosures:
+  a) Lease term
+  b) Mileage limits
+  c) Excess mileage charges
+  d) Early termination penalties
+  e)Purchase option / buyout price
+- Standardized disclosure language
+
+Use in Project:
+- Identification of mandatory lease clauses
+- Detection of missing or unclear disclosures
+- Compliance and contract fairness evaluation
+
+4. CFPB AUTOMOBILE FINANCE EXAMINATION PROCEDURES
+
+Official Link:
+https://files.consumerfinance.gov/f/documents/201908_cfpb_automobile-finance-examination-procedures.pdf
+
+Data Present:
+- Auto finance regulatory practices
+- Examples of:
+  a) Interest calculation methods
+  b) Fee structures
+  c) Penalty clauses
+-Guidelines for fair lending practices
+
+Use in Project:
+- Identification of risky or unfair clauses
+- Defining red-flag rules in contract analysis
+- Supporting negotiation recommendations
+
+5. CFPB “ASK CFPB” – CONTRACT TERMINOLOGY RESOURCE
+
+Official Link:
+https://www.consumerfinance.gov/ask-cfpb/
+
+Data Present:
+- Plain-language explanations of:
+  a) Auto loans
+  b) Lease agreements
+  c) Fees, penalties, and interest terms
+- Consumer-focused Q&A format
+
+Use in Project:
+- Simplifying legal language for users
+- Enhancing chatbot explanations
+- Improving consumer understanding of contracts
+
+NOTE:CFPB does not provide full dealership lease or loan contract PDFs
+CFPB resources provide:
+  - Authoritative clause definitions
+  - Legal disclosure standards
+  - Consumer protection guidance
+These resources are suitable and valid for academic and research projects
+
+
+VEHICLES APIS:
+
+1. NHTSA VEHICLE API
+
+Official Link:
+https://vpic.nhtsa.dot.gov/api/
+- The NHTSA (National Highway Traffic Safety Administration) Vehicle API is an official data source provided by the United States government. 
+It offers reliable and verified vehicle-related information, which is essential for validating vehicle details mentioned in car lease and loan contracts.
+
+Information Available:
+- VIN (Vehicle Identification Number) decoding
+- Vehicle make, model, and year
+- Manufacturer and production details
+- Body type and vehicle class
+- Safety ratings and compliance data
+- Recall and defect information
+- Consumer complaints and safety-related issues
+
+Usage in the Project:
+- This API is used to verify the authenticity of vehicle details extracted from contracts and
+to identify potential safety or recall-related risks associated with a vehicle.
+
+2. DATA.GOV VEHICLE DATASETS
+
+Official Link:
+https://catalog.data.gov/dataset/?tags=vehicles
+- Data.gov is the official open data platform of the U.S. government. It provides access to a wide range of 
+vehicle-related datasets published by federal and state agencies.
+
+Information Available:
+- Vehicle registration and ownership statistics
+- Fuel type and emissions data
+- Electric and hybrid vehicle adoption data
+- Transportation, mobility, and traffic-related statistics
+
+Usage in the Project:
+
+These datasets are used for analytical and contextual insights, helping the system understand broader
+vehicle trends and support data-driven comparisons during contract evaluation.
+
+3. EDMUNDS VEHICLE API (LEGACY)
+
+Official Link:
+https://developer.edmunds.com
+- The Edmunds Vehicle API (legacy) provides commercially curated vehicle information commonly used in the automotive industry.
+Although free access is limited, it remains valuable for academic and reference purposes.
+
+Information Available:
+- Detailed vehicle specifications and trims
+- Pricing information and MSRP detail
+- Ownership, depreciation, and maintenance cost estimates
+
+Usage in the Project:
+This API is used as a reference source for pricing and specification comparison, supporting fair market value estimation and negotiation insights.
+
+4. OPENDATASOFT VEHICLE DATASETS
+
+Official Link:
+https://public.opendatasoft.com/
+- OpenDataSoft provides publicly accessible datasets from various global sources, including vehicle-related reference data.
+
+Information Available:
+- Vehicle model and manufacturer details
+- Fuel type and basic technical specifications
+- Engine capacity and transmission information
+
+Usage in the Project:
+-This data is useful for validating vehicle model and specification details mentioned in contracts, 
+especially when cross-verifying information obtained from other APIs
+
 
