@@ -1,0 +1,94 @@
+Project Brief Review
+
+This project proposes an AI-powered assistant that helps users understand, review, and negotiate car lease or loan contracts. It combines LLM-based contract analysis, vehicle pricing benchmarks, and VIN-based car history lookup into a single mobile-friendly platform.
+
+The core strength of the project lies in:
+
+Automating SLA and clause extraction from complex legal documents.
+
+Providing data-backed transparency (APR, penalties, mileage limits, fair price ranges).
+
+Acting as a negotiation copilot, not just a passive analyzer.
+
+Technically, the project is feasible and well-scoped:
+
+Public contract samples and VIN APIs are available.
+
+LLMs are suitable for structured extraction and conversational negotiation.
+
+A phased milestone plan reduces implementation risk.
+
+Overall, it’s a strong applied AI project with real consumer value and clear extension paths (fintech, auto dealerships, compliance tools).
+
+To-Do List (Actionable)
+Phase 1: Foundation
+
+Finalize system architecture (frontend, backend, LLM service).
+
+Set up GitHub repo and basic CI workflow.
+
+Collect and label sample lease/loan contracts.
+
+Define a fixed schema for SLA fields (APR, term, penalties, etc.).
+
+Phase 2: Contract Processing
+
+Implement document upload API.
+
+Integrate OCR (PDF + scanned images).
+
+Store raw text and metadata in database.
+
+Build initial LLM prompt for SLA extraction.
+
+Validate extraction accuracy on multiple contract formats.
+
+Phase 3: Vehicle Intelligence
+
+Integrate NHTSA VIN API.
+
+Fetch vehicle specs, recalls, and manufacturer data.
+
+Design fallback logic for missing VIN details.
+
+Normalize vehicle data for comparison use.
+
+Phase 4: Pricing & Fairness
+
+Integrate or scrape public pricing sources.
+
+Compute fair price ranges by model, year, and location.
+
+Design and implement “Contract Fairness Score” logic.
+
+Flag red-flag clauses automatically.
+
+Phase 5: Negotiation Assistant
+
+Design negotiation prompt templates.
+
+Implement chatbot for dealer conversation guidance.
+
+Add email/message generation feature.
+
+Tie negotiation advice to extracted SLA + market data.
+
+Phase 6: Frontend MVP
+
+Build Flutter app structure (auth, upload, dashboard).
+
+Display contract summaries and risk highlights.
+
+Add VIN report and price comparison views.
+
+Integrate negotiation chatbot UI.
+
+Phase 7: Testing & Demo
+
+End-to-end testing (contract → insight → negotiation).
+
+UI/UX refinement.
+
+Prepare demo video and documentation.
+
+Deploy beta version.
