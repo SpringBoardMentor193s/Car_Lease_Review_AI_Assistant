@@ -1,0 +1,15 @@
+This database schema supports the Car Lease/Loan Contract Review and Negotiation AI Assistant. It organizes data into key areas:
+- Users: Store personal details and login information.
+- Vehicles: Capture VIN, make, model, year, odometer, and specs.
+- Contracts: Central table linking users, vehicles, dealers, and lenders.
+- Contract SLA & Clauses: Hold extracted financial terms (APR, payments, mileage, fees) and highlight risky clauses.
+- Negotiation: Threads and messages for dealer/lender communication, including AI-generated suggestions.
+- Dealers & Lenders: Business and contact details for transparency.
+- Vehicle Reports & Recalls: Provide car history, recalls, and safety information.
+- Price Recommendations: Store fair price ranges and benchmarks.
+- Logs & Audits: Track API integrations and user actions.
+- Providers & Credentials: Manage external data sources securely.
+How It Works
+- A user uploads a contract → SLA terms are extracted → Clauses flagged.
+- Vehicle linked via VIN → Recalls and reports fetched → Price recommendations calculated.
+- Negotiation assistant helps generate messages → Stored in threads → Offers compared.
