@@ -1,12 +1,22 @@
-The Car Lease/Loan Contract Review and Negotiation AI Assistant is an AI-powered mobile application that helps users understand and evaluate car lease or loan contracts.
-The system uses Large Language Models (LLMs) to automatically analyze uploaded contract documents and extract important SLA terms such as interest rate, lease duration,
-monthly payment, mileage limits, penalties, and early termination clauses.
+The Car Lease/Loan Contract Review and Negotiation AI Assistant is a 
+mobile application created to help users understand car lease and loan
+agreements in a simple way. Many car contracts are difficult to read
+because they contain legal and financial terms that are confusing for 
+common users.
 
-Users can upload contracts in PDF or image format, which are processed using OCR and LLM-based document understanding. The extracted information is presented as a 
-structured summary along with red flags and a contract fairness score.
+In this project, users can upload their car lease or loan contracts in 
+PDF or image format. The system reads the document using OCR and then 
+uses Large Language Models (LLMs) to extract important details such as 
+interest rate, lease duration, monthly payment, mileage limits, penalties,
+and early termination conditions.
 
-The application also performs VIN-based vehicle verification using publicly available APIs to fetch vehicle specifications, manufacturer details, and recall history.
-Vehicle pricing is compared with market benchmarks using open vehicle datasets to assess deal fairness.
+The application also verifies vehicle information using the VIN number by 
+accessing public vehicle data sources. This helps users confirm vehicle 
+details like manufacturer information and recall history. In addition, 
+the app compares the contract price with market price data to check whether 
+the deal is fair.
 
-An AI-powered negotiation assistant helps users identify negotiable terms and generate negotiation messages. The application is developed using Flutter, providing a 
-mobile-friendly interface and acting as a personal car purchase assistant to support informed financial decisions.
+An AI-based negotiation assistant guides users by suggesting negotiation 
+points and helping them communicate better with dealers. Overall, the 
+application acts as a personal car purchase assistant that helps users 
+make informed and confident financial decisions.
