@@ -1,0 +1,12 @@
+The Car Lease/Loan Contract Review and Negotiation AI Assistant is an AI-powered mobile application that helps users understand and evaluate car lease or loan contracts.
+The system uses Large Language Models (LLMs) to automatically analyze uploaded contract documents and extract important SLA terms such as interest rate, lease duration,
+monthly payment, mileage limits, penalties, and early termination clauses.
+
+Users can upload contracts in PDF or image format, which are processed using OCR and LLM-based document understanding. The extracted information is presented as a 
+structured summary along with red flags and a contract fairness score.
+
+The application also performs VIN-based vehicle verification using publicly available APIs to fetch vehicle specifications, manufacturer details, and recall history.
+Vehicle pricing is compared with market benchmarks using open vehicle datasets to assess deal fairness.
+
+An AI-powered negotiation assistant helps users identify negotiable terms and generate negotiation messages. The application is developed using Flutter, providing a 
+mobile-friendly interface and acting as a personal car purchase assistant to support informed financial decisions.
