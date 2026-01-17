@@ -1,0 +1,22 @@
+# AI-Based Car Lease Contract Review & Negotiation Assistant
+
+This project uses OCR, Large Language Models, VIN lookup, and market price estimation
+to analyze car lease contracts and assist users in negotiation.
+
+## Features
+- OCR-based contract text extraction
+- SLA & clause extraction using LLMs
+- VIN lookup via NHTSA API
+- Market price estimation
+- Contract fairness scoring
+- Auto-generated PDF report
+
+## Tech Stack
+- Python
+- Google Colab
+- OpenAI API
+- NHTSA Vehicle API
+- ReportLab
+
+## How to Run
+Open the notebook in Google Colab and run all cells sequentially.
