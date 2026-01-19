@@ -1,0 +1,74 @@
+{
+  "title": "ContractFacts",
+  "description": "Canonical structured representation of a car lease or loan contract.\nSingle source of truth for fairness evaluation.",
+  "type": "object",
+  "properties": {
+    "apr": {
+      "title": "Apr",
+      "minimum": "0",
+      "maximum": "40",
+      "type": "number"
+    },
+    "monthly_payment": {
+      "title": "Monthly Payment",
+      "minimum": "0",
+      "type": "number"
+    },
+    "lease_term_months": {
+      "title": "Lease Term Months",
+      "minimum": 1,
+      "maximum": 120,
+      "type": "integer"
+    },
+    "down_payment": {
+      "title": "Down Payment",
+      "minimum": "0",
+      "type": "number"
+    },
+    "mileage_limit_per_year": {
+      "title": "Mileage Limit Per Year",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "overage_fee_per_mile": {
+      "title": "Overage Fee Per Mile",
+      "minimum": "0",
+      "type": "number"
+    },
+    "early_termination_policy": {
+      "title": "Early Termination Policy",
+      "type": "string"
+    },
+    "residual_value_percent": {
+      "title": "Residual Value Percent",
+      "minimum": "0",
+      "maximum": "100",
+      "type": "number"
+    },
+    "late_fee_policy": {
+      "title": "Late Fee Policy",
+      "type": "string"
+    },
+    "maintenance_responsibility": {
+      "$ref": "#/definitions/MaintenanceResponsibility"
+    }
+  },
+  "required": [
+    "apr",
+    "monthly_payment",
+    "lease_term_months"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "MaintenanceResponsibility": {
+      "title": "MaintenanceResponsibility",
+      "description": "An enumeration.",
+      "enum": [
+        "lessee",
+        "lessor",
+        "shared"
+      ],
+      "type": "string"
+    }
+  }
+}

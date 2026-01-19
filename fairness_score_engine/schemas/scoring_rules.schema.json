@@ -1,0 +1,79 @@
+{
+  "title": "ScoringRules",
+  "description": "Collection of scoring rules indexed by rule name.",
+  "type": "object",
+  "properties": {
+    "rules": {
+      "title": "Rules",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Rule"
+      }
+    }
+  },
+  "required": [
+    "rules"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "ScoringMethod": {
+      "title": "ScoringMethod",
+      "description": "An enumeration.",
+      "enum": [
+        "z_score",
+        "categorical_map",
+        "boolean_rule"
+      ],
+      "type": "string"
+    },
+    "Direction": {
+      "title": "Direction",
+      "description": "An enumeration.",
+      "enum": [
+        "higher_better",
+        "lower_better"
+      ],
+      "type": "string"
+    },
+    "Rule": {
+      "title": "Rule",
+      "description": "Declarative scoring rule for evaluating a single contract field.\nEach rule converts a field value into a 0\u2013100 fairness score.",
+      "type": "object",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "method": {
+          "$ref": "#/definitions/ScoringMethod"
+        },
+        "weight": {
+          "title": "Weight",
+          "exclusiveMinimum": "0",
+          "maximum": "1",
+          "type": "number"
+        },
+        "direction": {
+          "$ref": "#/definitions/Direction"
+        },
+        "penalty_factor": {
+          "title": "Penalty Factor",
+          "exclusiveMinimum": "0",
+          "type": "number"
+        },
+        "categories": {
+          "title": "Categories",
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      },
+      "required": [
+        "field",
+        "method",
+        "weight"
+      ]
+    }
+  }
+}
