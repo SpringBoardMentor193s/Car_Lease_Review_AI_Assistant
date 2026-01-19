@@ -1,0 +1,54 @@
+[
+  {
+    "clause_type": "Termination For Convenience",
+    "example_text": "Either party may terminate this Lease Agreement for convenience upon thirty (30) days prior written notice. All obligations accrued prior to termination shall survive."
+  },
+  {
+    "clause_type": "Termination For Convenience",
+    "example_text": "The lessor may terminate this agreement at its sole discretion. Early termination by the lessee shall result in immediate acceleration of all remaining lease payments."
+  },
+  {
+    "clause_type": "Liquidated Damages",
+    "example_text": "Upon early termination, liquidated damages shall be assessed equal to the present value of all remaining payments plus administrative fees."
+  },
+  {
+    "clause_type": "Liquidated Damages",
+    "example_text": "The parties agree that liquidated damages represent a reasonable estimate of loss and are not a penalty."
+  },
+  {
+    "clause_type": "Cap On Liability",
+    "example_text": "The lessee’s total aggregate liability shall not exceed the total amount of lease payments paid during the previous twelve (12) months."
+  },
+  {
+    "clause_type": "Uncapped Liability",
+    "example_text": "Notwithstanding any limitation of liability, the lessee shall remain fully liable for losses arising from breach, negligence, or failure to maintain insurance."
+  },
+  {
+    "clause_type": "Warranty Duration",
+    "example_text": "The vehicle is warranted against defects in material and workmanship for a period of thirty-six (36) months or 36,000 miles."
+  },
+  {
+    "clause_type": "Warranty Duration",
+    "example_text": "Except as expressly stated, the vehicle is provided 'as is' and without any implied warranties."
+  },
+  {
+    "clause_type": "Insurance",
+    "example_text": "The lessee shall maintain comprehensive and collision insurance coverage, naming the lessor as loss payee, for the duration of the lease."
+  },
+  {
+    "clause_type": "Insurance",
+    "example_text": "Failure to maintain required insurance coverage shall constitute a material breach and grounds for immediate termination."
+  },
+  {
+    "clause_type": "Notice Period To Terminate Renewal",
+    "example_text": "Written notice of intent not to renew must be provided no later than sixty (60) days prior to the expiration of the lease term."
+  },
+  {
+    "clause_type": "Exclusivity",
+    "example_text": "The lessee shall not lease or operate any competing vehicle during the term of this agreement."
+  },
+  {
+    "clause_type": "Non-Disparagement",
+    "example_text": "The lessee agrees not to make any statements that may reasonably be construed as disparaging to the lessor."
+  }
+]
