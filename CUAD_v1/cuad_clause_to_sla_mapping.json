@@ -1,0 +1,145 @@
+{
+  "lease_identity_and_parties": {
+    "description": "Clauses that define the identity, scope, and legal binding nature of the lease agreement.",
+    "cuad_clauses": [
+      "Document Name",
+      "Parties",
+      "Governing Law"
+    ],
+    "mapped_sla_parameters": [
+      "lessor_identity",
+      "lessee_identity",
+      "jurisdiction"
+    ],
+    "importance_to_project": "Provides legal context and enforceability assumptions for all SLA terms.",
+    "risk_signals": [
+      "foreign governing law",
+      "ambiguous party definitions"
+    ]
+  },
+
+  "lease_timeline_and_renewal_logic": {
+    "description": "Clauses that define when the lease begins, ends, and how renewals or extensions are handled.",
+    "cuad_clauses": [
+      "Agreement Date",
+      "Effective Date",
+      "Expiration Date",
+      "Renewal Term",
+      "Notice Period To Terminate Renewal"
+    ],
+    "mapped_sla_parameters": [
+      "lease_start_date",
+      "lease_end_date",
+      "lease_term_duration",
+      "auto_renewal_flag",
+      "renewal_notice_period_days"
+    ],
+    "importance_to_project": "Critical for identifying hidden auto-renewal risks and lock-in conditions.",
+    "risk_signals": [
+      "automatic renewal without consent",
+      "short non-renewal notice period"
+    ]
+  },
+
+  "payment_structure_and_commitments": {
+    "description": "Clauses impacting direct monetary obligations and indirect financial exposure.",
+    "cuad_clauses": [
+      "Minimum Commitment",
+      "Price Restrictions",
+      "Volume Restriction",
+      "Revenue/Profit Sharing"
+    ],
+    "mapped_sla_parameters": [
+      "monthly_payment",
+      "down_payment",
+      "payment_escalation",
+      "minimum_payment_obligation"
+    ],
+    "importance_to_project": "Used to compute affordability metrics and long-term financial exposure.",
+    "risk_signals": [
+      "non-cancellable payment commitments",
+      "price adjustment clauses"
+    ]
+  },
+
+  "termination_and_exit_flexibility": {
+    "description": "Clauses governing termination rights, penalties, and exit constraints.",
+    "cuad_clauses": [
+      "Termination For Convenience",
+      "Notice Period To Terminate Renewal",
+      "Liquidated Damages",
+      "Cap On Liability",
+      "Uncapped Liability"
+    ],
+    "mapped_sla_parameters": [
+      "early_termination_rights",
+      "termination_penalty_summary",
+      "maximum_termination_liability",
+      "exit_flexibility_score"
+    ],
+    "importance_to_project": "Core driver of fairness score and risk assessment.",
+    "risk_signals": [
+      "remaining balance acceleration",
+      "uncapped post-termination liability"
+    ]
+  },
+
+  "warranty_maintenance_and_insurance": {
+    "description": "Clauses defining asset protection, coverage duration, and responsibility allocation.",
+    "cuad_clauses": [
+      "Warranty Duration",
+      "Insurance",
+      "Post-Termination Services"
+    ],
+    "mapped_sla_parameters": [
+      "warranty_coverage",
+      "insurance_requirements",
+      "maintenance_responsibility"
+    ],
+    "importance_to_project": "Determines operational risk and hidden cost exposure.",
+    "risk_signals": [
+      "warranty disclaimers",
+      "excessive insurance coverage requirements"
+    ]
+  },
+
+  "usage_and_behavioral_constraints": {
+    "description": "Clauses imposing behavioral, competitive, or post-contractual restrictions.",
+    "cuad_clauses": [
+      "Exclusivity",
+      "Non-Compete",
+      "No-Solicit Of Customers",
+      "No-Solicit Of Employees",
+      "Non-Disparagement"
+    ],
+    "mapped_sla_parameters": [
+      "usage_restrictions",
+      "competitive_limitations",
+      "post_lease_constraints"
+    ],
+    "importance_to_project": "Identifies non-financial constraints affecting lessee freedom.",
+    "risk_signals": [
+      "broad non-compete language",
+      "post-termination behavioral obligations"
+    ]
+  },
+
+  "legal_enforcement_and_liability": {
+    "description": "Clauses defining legal enforcement power and dispute exposure.",
+    "cuad_clauses": [
+      "Covenant Not To Sue",
+      "Third Party Beneficiary",
+      "Audit Rights"
+    ],
+    "mapped_sla_parameters": [
+      "legal_exposure_level",
+      "third_party_risk",
+      "audit_intrusiveness"
+    ],
+    "importance_to_project": "Used to assess asymmetric legal power between parties.",
+    "risk_signals": [
+      "unilateral audit rights",
+      "broad third-party enforcement"
+    ]
+  }
+}
