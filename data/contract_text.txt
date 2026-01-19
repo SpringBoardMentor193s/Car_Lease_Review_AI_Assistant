@@ -1,0 +1,650 @@
+A Consumer Action Report
+The CFPB Consumer Complaint Database
+A lot can be learned from the more than 600,000 consumer complaints that have been logged
+in the Consumer Financial Protection Bureau’s (CFPB) Consumer Complaint Database since it
+launched in 2012. Examining complaints filed by others about financial products and services
+can help you make financially savvy decisions and potentially avoid some costly problems.
+In this report, we highlight findings from our analysis of 2015 consumer complaint data for six
+of the 11 financial products the CFPB regulates. In addition to sharing our research results (page
+6), we describe how the database is organized and functions (Section I, below), explain how to
+use the database (page 14) and present our findings and recommendations (page 20).
+I. Complaint process and content
+In order for this report and the CFPB’s complaint database to be most useful, it’s important to
+get familiar with a few important components of the complaint process. Since 2011 the
+Consumer Financial Protection Bureau has been accepting consumer complaints and
+forwarding them to the companies named in the complaints. The CFPB tracks company
+responses and resolutions, and analyzes the complaints for harmful patterns and unfair and
+deceptive practices. In 2012, the CFPB made the complaints available to the public via its
+Consumer Complaint Database. It includes 11 main financial products, along with many sub-
+products.1
+Consumers can submit complaints online, over the telephone, or by mail, fax or email. The most
+popular way to submit a complaint is online—of the 271,600 complaints submitted in 2015, 71
+percent were submitted through the CFPB’s website (http://www.consumerfinance.gov/data-
+research/consumer-complaints/).
+(The complaint process. Source: wwwConsumerFinance.gov)
+1 Some, but not all, product categories include sub-products. For example, the Mortgage category includes as sub-
+products: conventional ARM, conventional fixed, FHA mortgage, home equity loan or line of credit, reverse
+mortgage, second mortgage, VA mortgage and other mortgage.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 1What information can one find in the database?
+The Consumer Complaint Database contains the:
+• Date the complaint was submitted by the consumer
+• Type of financial product (e.g., credit card, credit report, payday loan, etc.)
+• Problem or issue
+• Complainant’s narrative (optional since June 2015)
+• Name of company
+• State and ZIP code (full or partial) of consumer
+• Category of company’s private response to consumer
+Ninety-seven percent of consumer complaints receive a response from the company. While
+response details are not publicly available, they are carefully monitored by the CFPB and are
+used by the Bureau to help prioritize their oversight and enforcement work. Companies have
+the following five response options to choose from:
+• Complaint “closed with explanation.” Seventy-two percent of company responses fall
+into this category. For example, a consumer who submitted a complaint against a credit
+card issuer because he was denied a credit line increase might receive a written
+explanation that outlines why his request was not approved.
+• Complaint “closed with monetary relief.” This means the offending company sent a
+“measureable” dollar amount to the consumer. Monetary relief includes things like
+refunding a penalty fee.
+• Complaint “closed with non-monetary relief.” Examples of non-monetary relief include
+things like correcting credit report errors, changing the terms of an account or ceasing
+debt collection calls.
+• “Closed.” The company closed the complaint without any relief or explanation.
+• “In-progress.” This means the company is reviewing the complaint but cannot respond
+within 15 days of receiving it. (CFPB expects complaints to be resolved within 60
+calendar days.)
+Companies can also choose from a handful of administrative responses when they will not be
+addressing the complaint according to the usual process or at all (for example, if the complaint
+has been directed to the wrong company or the issue is the subject of a lawsuit).
+Other information in the database includes:
+• Company’s public response: Companies are not required to provide a public response,
+and most don’t. However, those that do can choose from nine standardized responses.
+• Whether the consumer provided consent to publish the details of their complaint.
+• The date the complaint was forwarded to the company.
+• Untimely response: If the company does not meet the 15-day deadline to respond to a
+complaint, the CFPB will mark it as “untimely.”
+• Consumer feedback: Consumers can report their dissatisfaction with a company’s
+response to the Bureau. In 2015, 20 percent of consumers who submitted a complaint
+to CFPB disputed the company’s response. Consumers will have the option in 2017 to
+use a satisfaction rating scale (one to five stars) to provide consumer feedback.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 2Consumers will also be able to answer a three-question Company Response Survey and
+choose “Strongly agree” to “Strongly disagree” to the following questions:
+! I understood the company’s response.
+! The company did what it said it would do.
+! The company addressed all of my issues.
+The new company rating system will also include a box where consumers can add details as to
+why they are satisfied or dissatisfied with a company’s response. Consumers can choose to
+have these feedback details reported publicly, alongside their original complaint narrative.
+What’s not in the database?
+The database does not contain:
+• Complaints that are the subject of a lawsuit
+• Complaints referred to other regulators
+• Complaints about companies not supervised by the CFPB
+• Complaints reported by a company as the “incorrect company” listed in a dispute
+Complaint narratives
+Since June 2015, consumers have had the choice to include a “narrative,” or personal written
+explanation of what their complaint is about. Consumer narratives are the heart of the
+complaint—they explain why a consumer is pursuing a problem, using the individual’s firsthand
+experience to allow others to understand the issue, put the problem in context and identify
+harmful patterns across complaints. Only consumers who give the Bureau written permission
+have their details posted in the database. In 2015, 59 percent of consumers voluntarily shared
+their complaint details with the public.
+Examples of 2015 complaints with narratives in the database:
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 3How can narratives be valuable?
+• Narratives put issues in context, allowing the public to assess the validity of a complaint
+and draw their own conclusions.
+• Complaint details offer a more vivid picture of the problem that cannot be gleaned from
+other data.
+• They provide context for a company’s behavior.
+• Narratives can help expose harmful patterns, such as discriminatory practices.
+• The CFPB relies on complaint details to stay abreast of recurring problems and to create
+new rules to prevent harmful trends in the future.
+• They can be a valuable pre-purchase resource to help consumers make informed
+decisions about who to do business with.
+• Narratives and complaint resolutions (or lack thereof) can help shape others’
+perceptions of a company. Companies that resolve matters swiftly may benefit
+financially by boosting their public reputation.
+Redaction process
+CFPB has a “scrubbing” process that redacts, or removes, certain details from the complaint
+narratives. This is done to protect consumers’ identity and personal information. When a detail
+is “scrubbed,” it appears in the database as a series of Xs (“XXXX”).
+Here’s the type of personal information that the CFPB removes:
+• Name, age, race, ethnicity, sexuality, religion, disabilities and medical conditions
+• Names of companies not directly related to the complaint
+• ZIP codes (entirely redacted in complaints from consumers in small communities, or
+often just the first three digits will remain)
+• Employment information
+• Sensitive numbers such as credit card account numbers and Social Security numbers
+• Offensive language
+Example of what a redacted narrative looks like in the database:
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 4How companies respond to complaints
+Once the consumer submits the complaint, the CFPB reviews it and sends it off to the company
+named. The company has 15 days to respond, and they are expected to resolve the complaint
+within 60 days of it being sent.
+Companies responded to approximately 97 percent of complaints sent to them in 2015.
+Companies’ private responses to consumers, and the CFPB, may include an explanation of the
+actions they have taken or plan to take. Companies also must choose to file their response
+under one of the following categories: “Closed with monetary relief,” “Closed with non-
+monetary relief,” “Closed with explanation,” “Closed,” “In progress” or a handful of
+administrative options (for example, “Incorrect company” or “Duplicate CFPB case reported”).
+For the purposes of this report, we focused on “Complaint closed with explanation,”
+“Complaint closed with monetary relief” and “Complaint closed with non-monetary relief.”
+Public company responses
+Additionally, companies can choose to respond publicly in the consumer complaint database
+with one of the following nine standardized public responses. Most companies don’t provide a
+public response.
+1. Complaint caused principally by actions of third party
+2. Complaint is the result of an isolated error
+3. Complaint relates to a discontinued policy or procedure
+4. Company believes complaint represents an opportunity for improvement to better
+serve consumers
+5. Company believes it acted appropriately as authorized by contract or law
+6. Complaint is a result of a misunderstanding
+7. Can't verify or dispute the facts in the complaint
+8. Company has responded to the consumer and the CFPB and chooses not to provide a
+public response
+9. Company disputes the facts presented in complaint
+(Source: Figure 21 from the CFPB’s 2015 Consumer Response Annual Report)
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 5Note: The number of complaints a company receives is relative to company size and market
+share. The CFPB does not adjust complaint data based on number of customers or any other
+measure. For step-by-step instructions for using the database, see page 14.
+II. 2015 complaint data overview
+We examined the database to help you better understand how to use this first-rate complaint
+tool and to learn how companies have responded to the consumer complaints they’ve received.
+We focused on 2015 complaint data from six of the 11 financial products the CFPB regulates:
+debt collection, credit reporting, mortgages, bank accounts and services, credit cards and
+student loans. The bulk of the data we reviewed comes directly from the complaint database
+and from the CFPB’s 2015 Consumer Response Annual Report (January 1, 2015-December 31,
+2015).
+Bank Accounts and Services
+Bank account and service complaints account for 8 percent of all complaints received by the
+CFPB in 2015. This includes complaints about checking accounts, savings accounts, certificates
+of deposit and check cashing services. The top three types of bank account/service complaint
+were:
+• Account management (includes opening or closing an account) (42%)
+• Deposits and withdrawals (26%)
+• Making and receiving payments (13%)
+Examples of actual bank account and service complaints received by the CFPB in 2015:
+Problem with account management:
+— The bank will NOT let me close my account even though it has been no charge for the
+checking account and now Regions Bank has charged me a monthly fee without using
+the account. I was waiting for the direct deposit to start depositing into my new bank
+account to close the account. Now I presume they will keep charging me a monthly fee
+b/c I have a negative balance.
+Problem with depositing or withdrawing funds:
+— We closed on a home and needed to forward the funds to our current mortgage. We
+had the escrow officer deposit the amount to our Wells Fargo account as a cashiers
+check so it would be available within a day but they are holding it for more than seven
+days! Our escrow officer said that was illegal to detain our funds and so we are following
+up with the appropriate agency 's involved.
+Problem making or receiving payments:
+— A payee to whom I wrote a check erroneously cashed the check twice for different
+amounts. I called SunTrust to address the issue and over a month later it has not been
+addressed.
+How did companies respond to bank account and service complaints?
+• 18 percent of consumers received monetary relief, at an average of $105 per complaint.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 6• 2 percent received non-monetary relief, such as a change in account terms or the re-
+opening of an account.
+• 72 percent received an explanation from the company.
+Companies chose not to publicly respond to 94 percent of the bank account/service complaints
+they received. Of those they did respond to publicly, in 4 percent they stated that they “acted
+appropriately as authorized by contract or law.” Less than 0.5 percent of the complaints were
+attributed to “an isolated error.”
+Credit Cards
+Credit card complaints account for 8 percent of all complaints received by the CFPB in 2015.
+The top three types of credit card complaints were:
+• Billing disputes (16%)
+• Other (e.g., deferred interest programs, decreased credit limit2) (12%)
+• Identity theft, fraud, embezzlement (11%)
+Examples of actual credit card complaints:
+Problem with account management:
+— Received a letter stating my Chase Credit Card was going to expire within the next
+two months. Since the card had not been used within [several] years, they were closing
+the account when it expires. It went on to say if I would like to keep this account open,
+please call and they would review. I called and after giving them my income and
+information they were willing to keep the card open at $1,000 limit whereas before it
+was $6,500. They also went on and reduced my other cards from Chase as well taking
+the limit from $5,000 to $1,000. What these actions have done is drastically reduce my
+credit score from good to below average of which I told them so, but they didn't care
+stating that was my problem.
+Problem with billing inaccuracies:
+— We have a Bank of America credit card and every month I set up the payment to be
+taken from our checking account. This month I set the amount to be paid ($8,700) to
+come out of our checking account on the due date. It did. The total amount due was
+$8,700. However, they also deducted another $8,700 from our checking account.
+Fortunately, we had just sold our house, so we had money to cover the double payment!
+I called them and asked them to put the money back. I was told it would take [several]
+business days to do so. We were never given an explanation on how this happened,
+compensated for the use of our money, which I feel is only fair. If we had not sold our
+house, this would have put our finances and other payments taken from our checking
+account in serious jeopardy! My greatest fear is that this might happen again with them.
+Problem with fraud:
+— Fraudulent charges were made to my credit card. I had numerous phone
+conversations with [customer service] assuring me that it would be resolved in my favor.
+2 CFPB Oct 2015 Monthly Snapshot, p12 (http://files.consumerfinance.gov/f/201510_cfpb_monthly-complaint-
+report-vol-4.pdf)
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 7Now I am informed that because I did not contact them in writing I am liable for the
+fraudulent charges totaling $26,000.00.
+Problem with accounts being closed without knowledge or consent:
+— Citibank closed my account without any notice or ability for me to take action that
+would avoid the closure. I believe this is an example of unfair and deceptive business
+practices. My account was in good standing and open since 1998. Citibank claimed that
+the account was closed due to inactivity. There is nothing in the card member agreement
+that addresses this topic, nor has Citibank disclosed their policies regarding card
+inactivity.
+How did companies respond to credit card complaints?
+• 19 percent received monetary relief, at an average of $100 per complaint.
+• 11 percent received non-monetary relief, such as a credit line restored or removed, a
+change in account terms or rates, or having a submission to a credit bureau corrected.
+• 64 percent received an explanation from the company.
+Companies chose not to publically respond to 97 percent of the credit card complaints
+received. Of those they did respond to publically, in 2 percent they stated that they “acted
+appropriately as authorized by contract or law.” Less than 1 percent of the complaints were
+thought to be the result of an “isolated error.”
+Credit Reporting
+Credit reporting complaints accounted for 20 percent of all complaints received by the CFPB in
+2015. The top three types of credit reporting complaint were:
+• Incorrect information on credit report (79%)
+• Credit reporting company’s investigation (8%)
+• Unable to obtain credit report or score (6%)
+Examples of actual credit reporting complaints:
+Problem with incorrect information on credit report:
+— Background screening for lease on new house turned up with someone else’s social
+security number.
+Problem with company’s investigation:
+— A collection account from XXXX has been misreported on my credit report with
+Equifax. I have disputed this with Equifax for over XXXX years and it still remains. This
+collection account has been removed from both XXXX and XXXX and XXXX companies
+have shared this information with Equifax. However, it still remains on my file with
+Equifax. I even spoke with a supervisor at Equifax about this. It's time they receive a
+$1,000 fine for non-compliance of FTC regulations.
+Problem obtaining a credit report:
+— I’ve attempted to pull my free annual credit report from Big XXXX Credit Bureau on
+XX/XX/2015. I was able to promptly receive my copies from XXXX and XXXX, but I could
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 8not obtain a copy from Equifax. After I made a phone call to seek help I was told they
+could not help me and they had to charge me $XXXX to obtain a copy.
+How did companies respond to credit reporting complaints?
+• Almost no one received monetary relief; the small number who did received an average
+of $23 per complaint.
+• 25 percent received non-monetary relief, including having submissions to credit
+reporting agencies corrected or having a customer service issue resolved.
+• 70 percent received an explanation from the company.
+Companies chose not to publicly respond to 99 percent of the credit reporting complaints they
+received. Of those they did respond to publicly, in less than half a percent (0.36) the company
+thought the issue was caused by “the actions of a third party” and in 0.22 percent the company
+thought they “acted appropriately as authorized by contract or law.”
+Debt Collection
+Debt collection (medical, credit card, payday loan and other) complaints account for 31 percent
+of all complaints received by the CFPB in 2015. The top three types of debt collection complaint
+were:
+• Attempts to collect debt not owed (40%)
+• Communication tactics (18%)
+• Disclosure verification of debt (15%)
+Examples of actual debt collection complaints:
+Problem with an attempt to collect a debt that is not the complainant’s:
+— I paid this medical account in full with the original creditor and I was assured that the
+collections entry were going to be removed completely from all credit bureaus’ reports.
+The collection agency is refusing to remove the entry after a full payment was made to
+the original creditor and the collection agency is reporting the account as a paid
+collection instead of removing the account as I was told and agreed to.
+Problem with debt collectors’ communication tactics:
+— Enhanced Recovery Company has been calling my phone non-stop over the last
+several weeks, presumably about a debt to collect. They refuse to tell me specifically
+what the calls are about other than a “personal business matter.” I have made it VERY
+clear to them that we have no business if they can’t provide further details. I want the
+harassment to stop. Calls always come while I am at work, wasting my time, and my
+customers’ time.
+Problem pertaining to disclosure verification of debt:
+— A company is trying to collect many medical debts, which are also listed on my
+personal credit report. I have requested several times for verification. This company will
+not furnish a signed authorization [or proof of the procedures], they just furnish a
+statement, which proves nothing. I asked to validate the numerous listings on my
+personal credit file and again all I receive is statements. Many years ago I had [several]
+medical bills, but they were paid years ago.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 9How did companies respond to debt collection complaints?
+• 1 percent received monetary relief, at an average of $317 per complaint.
+• 15 percent received non-monetary relief, including having debt collection calls or other
+company contact stop or having submissions to a credit bureau corrected.
+• 67 percent received an explanation from the company.
+Companies chose not to publically respond to 78 percent of the debt collection complaints they
+received. Of those they did respond to publically, in 14 percent they stated that they “acted
+appropriately as authorized by contract or law.” Two percent of the complaints were believed
+to be “a result of a misunderstanding,” and 2 percent contained details that the company “can’t
+verify or dispute.” One percent of complaints that received a public response were the result of
+the “actions of third party.”
+(Source: The CFPB’s 2015 Consumer Response Annual Report)
+Mortgages
+Mortgage complaints account for 19 percent of all complaints received by the CFPB in 2015.
+This includes complaints regarding conventional adjustable rate mortgages, fixed rate
+mortgages and reverse mortgages. The top three types of mortgage complaint were:
+• Problems when unable to pay (43%)
+• Making payments (37%)
+• Applying for the loan (9%)
+Examples of actual mortgage complaints:
+Problem related to inability to pay or obtain a loan modification:
+— I have been trying to work with Citi mortgage to obtain a loan modification to stay in
+my home. However they have not been willing to help me. The service department has
+lost my file XXXX different times and claimed that I never started a loan modification.
+They have issued me just in the last seven months XXXX different customer support
+specialist who would not return my phone calls and would not return email in a timely
+manner. Out of the blue they pulled her out of the case and then we got a different
+representative, who seemed to be very kind, understanding, and very accommodating.
+With XXXX, over the last several months we were able to get all of the documentation to
+her in order to complete the loan modification. XXXX indicated that she has submitted all
+the paperwork to underwriting department. XXXX gave me the reassurance that she
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 10would do anything that she could to keep me in my home. Citi Mortgage went ahead
+again and switched customer support specialist to (XXXX) which will not return our
+phone calls or emails. I have called her everyday, I was lucky one day and she actually
+picked up the phone. She asked my information and my loan number, as soon as she
+identified who I was she stated that she was on the other line. It has been over a week
+and I have still haven't heard back from XXXX. I just received a letter from XXXX and
+XXXX, which is a firm that has been retained to conduct a non-judicial foreclosure sale. I
+am absolutely shocked, I was just told thirty days ago that all of the paperwork that I
+submitted looked very good and they were going to do anything to keep me in my home.
+Now my case has been sent over to a law firm for foreclosure proceedings. I know this is
+definitely against the law, and they are committing fraud. They have not tried to help
+me, they don't communicate with me, they keep switching my file around to different
+individuals within the company with no resolution.
+Problem with making payments:
+— Penny Mac consistently misapplies my payments. I generally pay more than the
+minimum. They apply it all to principal, add late fees, call me for payment, when the full
+amount+ is always sent in WAY before the due date. Then I have to spend too much time
+on the phone getting fees reversed and explaining to them how to apply the payment
+correctly. If it didn’t cost me money, I would switch companies in a heartbeat.
+Problem applying for a mortgage:
+— Amerisave Mortgage Corporation offered me a very attractive interest rate for
+refinancing my mortgage. I went ahead and applied for the loan as they guaranteed rate
+lock for a period of 60 days. They asked me to pay $420.00 for payment towards
+appraisal immediately. I also submitted online all the documents they requested. Then
+they sat on my application for almost two months. When I followed up, they said they
+were busy with too many applications and offered to extend rate lock since they were
+delaying it. They did extend but kept delaying it further and coming back and asking
+some document or other. Today they sent me mail saying that rate lock expired and I will
+have to go for whatever rate exists now. On top of it they are also asking me to pay for
+appraisal again saying that my appraisal report expired.
+How did companies respond to mortgage complaints?
+• 3 percent received monetary relief, at an average of $500 per complaint.
+• 5 percent received non-monetary relief, including being offered foreclosure alternatives
+(without direct monetary value) or having a customer service issue resolved.
+• 81 percent received an explanation from the company.
+Companies chose not to publically respond to 87 percent of mortgage complaints. Of those
+they did respond to publically, in 8 percent the company believed it “acted appropriately as
+authorized by contract or law.” One percent of the complaints were believed to be the result of
+“an isolated error.”
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 11Student Loans
+Student loan complaints accounted for 3 percent of all complaints received by the CFPB in
+2015. The top three types of student loan complaint were:
+! Dealing with lender or servicer (62%)
+! Can’t repay loan (33%)
+! Getting a loan (5%)
+Examples of actual student loan complaints:
+Problem dealing with lender or servicer:
+— I am a co-signer on my son's student loan. During the consolidation process Wells
+Fargo advised us not to make a payment, and that a late fee would be assessed. After
+the loan was consolidated, I called to have the late fee reversed—it was not. The
+inclusion of the late fee caused the principal balance and the minimum payment to be
+greater than it otherwise would have been. I have been repeatedly promised that the
+error would be corrected. It has not been corrected. In addition, there is no way to set up
+automatic payments, or access account information without my son 's permission even
+though I am a co-signer on the loan.
+Problem repaying a loan:
+— AES refuses to assist me with a reasonable payment option for my ALPLN loan. I am
+not able to make the current amount (it is an entire paycheck at my current wage) and
+they simply state there is no other option. If the current situation continues it will cause
+great undue hardship upon my family and me. Take note that I have made timely
+payments since for years now. I sincerely asked that they provide me with another
+option and they stated I had used all my options. They offered to lower another loan
+amount (only temporary), but of course that would lead to paying a greater amount of
+interest on that loan leaving me worse off than I am currently. I want to repay my debt
+however they make it impossible, the interest rates are completely unaffordable.
+Problem applying for a loan:
+— I applied to have my student loan refinanced...and the company quoted me at a rate
+of 5.2%, but when the loan was approved the rate was increased to 6.86% with no
+explanation even though I have an excellent credit score. When I asked the
+representative to investigate why the rate changed she said she would check with the
+underwriting department and get back to me. That was two weeks ago and now she is
+ignoring me. This is a classic example of “bait & switch.”
+How did companies respond to student loan complaints?
+• 5 percent received monetary relief, at an average of $173 per complaint.
+• 6 percent received non-monetary relief, including receiving a change in account terms
+or having a customer service issue resolved.
+• 83 percent received an explanation from the company.
+Companies chose not to provide a public response 78 percent of the time. Of those they did
+respond to publically, in six percent of the cases the company believed the complaint was due
+to “actions of third party,” and in 5 percent the company believed it “acted appropriately as
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 12authorized by contract or law.” In 1 percent, the company thought the complaint was due to an
+“isolated error.”
+(Source: The CFPB’s 2015 Consumer Response Annual Report; may not total 100 percent due to rounding)
+When to use the database
+Before purchase/use
+Reviewing complaint narratives before doing business with a particular company can help
+consumers evaluate the company based on others’ firsthand experiences and avoid problems.
+For example, Sofia, from New York, was looking for a money transfer service to send and
+receive money for a side business. She decided to use the CFPB database to review customers’
+experiences with MoneyGram and Western Union, two money transfer businesses. She filtered
+complaints first by company, and then by complaint narratives from New York. She noticed that
+there are nearly three times as many fraud and scam complaints for MoneyGram as there are
+for Western Union (despite Western Union being the larger company), so decided to choose
+Western Union for her business.
+After purchase/use
+Consumers might also examine database details to evaluate a company they’re currently having
+problems with to compare their experience with that of other consumers. The database also
+allows consumers to report unreasonable, unfair or deceptive practices and alert others.
+For example, John took out a student loan with Wells Fargo five years ago. Due to
+unemployment after graduation, he struggled to make the loan’s monthly payments. He tried
+numerous times to refinance his loan to lower the monthly payments. Despite multiple phone
+calls and emails, the bank continued to refuse his request to modify the loan. He filtered the
+CFPB database to review student loan complaints with Wells Fargo and read some of the
+consumer narratives:
+— Since graduation I have struggled to pay my student loans, due to terms of
+unemployment and low-wage paying jobs. I am in a better situation than I was six years
+ago but still struggle to pay my monthly payment. This has brought down my credit and
+increased the interest on my loan. I have tried numerous times to refinance my loan to
+bring down the payment to a more manageable monthly rate, each time Wells Fargo,
+who holds my loans, denied the request. With this I am on the verge of going into
+deferment with my loans. This is an issue many of us our dealing with. Who can help us?
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 13— Three years ago, when my spouse lost her full time job, I started negotiating with
+Wells Fargo to refinance a student loan or lower the interest rate or increase the
+remaining period to reduce the minimum monthly payment amount because it is very
+hard for me to pay. They never agreed, but they frightened me by threatening to
+increase the interest, while the interest is supposed to be fixed!! Is there a solution?
+Based on database details, John decided to file his own complaint with the CFPB and include his
+own narrative, hoping to receive help to refinance his student loan. He also hoped to alert the
+CFPB and other consumers of Wells Fargo’s reluctance to refinance customers who are
+struggling to pay their loans.
+III. How to use the Consumer Complaint Database
+1. Go to the official Consumer Financial Protection Bureau website:
+(http://www.consumerfinance.gov).
+2. Click on “Data & Research” in the header and select “Consumer Complaint Database” from
+the dropdown list to view the database. (To submit a complaint, choose the blue link in the top
+right corner of the homepage.)
+Alternatively, you can scroll down the page (see graphic below) and click on the “Browse public
+complaints about companies” link under “Submit a complaint.”
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 143. The complaint database homepage offers you three options:
+(1) Read consumer narratives; (2) View complaint data; or (3) Download options and API.
+Option 1: If you choose “Read consumer narratives,” you will see only complaints where
+consumers have included a complaint narrative (complaint details). This view also reveals
+the company’s standardized response, if any.
+Option 2: To view all complaint data for all financial products/services, click on the middle
+icon, “View complaint data.” Users have the ability to filter complaints by product, by
+narrative and by other categories of data.
+Option 3: This option allows users to download all complaint data into an Excel file. This
+option is typically used for in-depth research.
+(Continues on next page)
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 154. While on the Consumer Complaint Database homepage
+(http://www.consumerfinance.gov/data-research/consumer-complaints/), you can scroll
+down to the row of icons to review complaint details by product category. For example, a
+consumer can click on the “Credit reporting” icon (hover over each icon with your cursor to
+see the category name appear), then the “See Credit reporting complaint data” link below
+to see only the data for that complaint category.
+5. You can filter the complaint information using the (1) gray header or (2) the filter tool in the
+blue box on the right side of the screen.
+The (1) gray header (row above complaint listings) lists the different categories of data. You can
+organize the data in ascending or descending order (for example, from A to Z or from Z to A) as
+well as filter narratives according to the corresponding sub-categories that pertain to your
+search. If you are interested in seeing narratives that come from a particular state, Maine, for
+example, choose “ME” from the dropdown list that appears when you click the Menu icon to
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 16the right of the word “State” and then select “Filter This Column.” Or, if you are interested in
+seeing all the information in the database in alphabetical order according to state, choose “Sort
+Ascending.” To remove a filter, click on the small red “T” symbol in the gray bar or select “Clear
+Sort” from the dropdown menu. Then you can choose another filter.
+6. The blue filter box on the right side of the browser screen (click the blue Filter button above
+the gray header if it doesn’t appear automatically) can be used when performing more complex
+filtering. The box allows for multiple filter conditions to be applied to the data at once. You can
+“Add a New Filter Condition” and choose criteria that will filter out any entry that does not
+match your search conditions. For example, show “Credit reporting” complaints dealing with
+“Incorrect information” by “Year.” Use the word “contains” instead of “is” to avoid relevant
+data being filtered out due to slight variations in text (an extra space, different capitalization,
+etc.). For example, if you want to read complaints where “Fraud or scam” is the sub-issue but
+you choose “Sub-issue” “is” from the filter menu and write just “fraud” in the search box, your
+search would turn up no results since the sub-issue is, by default, “Fraud or scam.” If you
+instead conducted a search that looked for “Sub-issue” “contains” “fraud,” your search would
+generate the results you are looking for. Avoid adding extra spaces at the beginning or end of
+your search terms to prevent errors.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 177. After filtering the complaints, you can browse and even save your filtered search (if you set
+up a free account before searching).
+(Continues on next page)
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 188. For the best results when searching for complaints about a company that is owned by
+another company, search the “Consumer complaint narrative” column, not the “Company”
+column. When adding a filter condition, choose “Consumer complaint narrative” and choose
+“contains” from the dropdown menu. Then type the desired company name in the search box.
+In some cases, the names of companies that are owned by other companies will only appear in
+the “Consumer complaint narrative” column because the “Company” column lists the name of
+the parent company (for example, with prepaid cards and specialty consumer reporting
+bureaus).
+(Continues on next page)
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 19IV. Findings and recommendations for the
+CFPB Consumer Complaint Database
+Consumer Action has worked to encourage the CFPB to make its public complaint database as
+useful, transparent and powerful as possible. Over the last five years, the Bureau has expanded
+the database’s functions and information. Its existence is an important way for consumers to
+evaluate a business and alert others to problems. However, we believe there is more work to
+be done to make this first-rate tool even more helpful to consumers.
+Consumer Action’s review of the CFPB complaint database found it to be “clunky” to use at
+times and aesthetically uninviting. When filtering the data to target a search we often had no
+results appear; the tool was sensitive to spacing variations and sometimes difficult to use. We
+often had to restart our search, which wastes time and frustrates user.
+Information about complaint outcomes is sparse. Most of the very limited information on
+complaint resolutions was found in the CFPB Consumer Response Annual Report, and even
+there details are insufficient. Consumers cannot learn what solutions are working with certain
+companies and can acquire no findings on why consumers dispute complaints (now called
+“feedback”). (The Bureau plans to add a consumer satisfaction rating scale and narrative where
+complainants can rate how pleased or displeased they were with the outcome of their
+complaint and explain why.)
+While consumers receive responses from companies 97 percent of the time, pure complaint
+resolutions are dismally low. As of January 2016, only 6 percent of complaints received
+monetary relief and 12 percent received non-monetary relief. Amounts of monetary relief vary
+by category (Prepaid Cards: 24 percent monetary relief; Mortgages: 3 percent). Private
+explanations from the company to the consumer accounted for 72 percent of responses. These
+might include things like why the consumer did not receive a credit line increase, why they
+were denied a loan or how the bank’s overdraft process works.
+These issues do not negate the value of the database. It contains critical information for both
+consumers and regulators. For example, our intern learned from studying the complaint
+narratives (details of the complaint) that many consumers struggle to have credit reporting
+errors removed from their credit bureau files. This exposed him to the need to check his credit
+reports regularly to ensure accuracy, especially since a consumer’s access to loans and credit
+(often jobs and insurance) are reliant on the data in our credit reports. Likewise, regulators are
+able to learn from the data how well the market is working, particularly in regard to individual
+companies’ financial products and services, both in general as well as in distinct communities.
+Based on what we’ve learned, we've compiled a list of suggestions to improve the utility of this
+valuable tool.
+1. Include all complaints. All complaints filed with the CFPB should be part of the public
+database, including complaints referred to other agencies or involved in a lawsuit. All
+complaints should also be listed by the specific company the consumer complained
+about, not only by the parent company’s name.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 202. Increase and improve information on consumer relief.
+a. Add in-depth relief and resolution information. This information is not currently
+available in the database, and very limited relief information is in the CFPB’s
+complaint annual report.
+b. Include details about the resolutions consumers have received:
+i. Monetary relief: Show dollar amounts received, the type of complaint
+filed and the company in question.
+ii. Non-monetary relief: List the specific action taken by the company (for
+example, “Error removed from credit bureau records,” “account terms
+changed,” etc.).
+3. Release explanations. Seventy-two percent of consumers in 2015 received an
+explanation from the company in response to their complaint. Details from these
+explanations should be transparent to consumers. The Bureau should provide the
+public with the primary explanations consumers are receiving (examples might include
+why a credit line was not increased or a loan was denied). If companies are not
+providing complainants with tailored responses as required, the Bureau should
+publically disclose which companies have not complied. This is helpful information for
+consumers who are choosing which companies to work with.
+4. Include details in public company responses. If a company believes that a third party
+was at fault, it would be helpful to learn specifics from the company’s perspective. This
+would help distinguish legitimate company claims from those that take advantage of
+the opportunity to shift responsibility to another party.
+5. Note third-party referrals. Credit bureaus, debt collection agencies and other
+companies that frequently respond to consumer complaints by attributing responsibility
+to a third party should be compelled to provide the consumer with the name and
+contact information of the third party to expedite complaint resolution.
+6. Improve communication with complainants. If a company does not respond to a
+consumer complaint, the Bureau should report it in the database as “No response.” This
+should include companies that do not respond within 60 days of receiving a complaint.
+It should be easy for consumers to see the percentage of complaints to which a specific
+company does not respond in a timely manner or at all.
+7. Reveal the company’s complaint handling history. The Bureau should make it possible
+for consumers to clearly see in the database how individual companies are handling the
+complaints they receive. A company “snapshot” could include an overview of response
+times, explanations and relief (monetary and non-monetary). Consumers could use this
+information to evaluate whether a company is worth doing business with, based in part
+on how well they address complaints. (The upcoming satisfaction rating system should
+help.)
+8. Enable mobile access. Many consumers access the internet primarily via a mobile device
+(smartphone or tablet) rather than a computer. Enhancing smartphone capability is a
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 21must for any useful complaint tool. The search capabilities should not be restricted and
+viewing should not be compromised for those using smaller screens.
+9. Offer simple, step-by-step instructions and update the filter tutorial video for new
+users. A brief introduction for those using the database in their web browser would be
+very helpful for consumers who may otherwise see the system as daunting. Instructions
+should encourage users to keep searches simple; highlight commands for rearranging
+columns or searching data by keyword, company or product; and include useful “tips,”
+like “When adding filter conditions to the blue filter sidebar, avoid using “is”; instead
+click on the tiny arrow and select the word “contains” for best results.”
+10. Improve functionality. Make filtering the data easier and faster. Make changes that
+avoid the opportunity for users to become frustrated by an overly sensitive filter, lack of
+desired results or need to restart searches from scratch. Make the interface more
+intuitive for the layperson.
+11. Relax the scrubbing standard. While consumer privacy is imperative, sometimes too
+much information is redacted from complaint details (dates, times and numbers), and
+what’s removed often seems inconsistent.
+12. Require complaint resolutions. Require all companies supervised by the CFPB to
+adequately respond to and attempt to resolve consumer complaints within the 15- and
+60-day time frames. The CFPB should pursue companies that do not respond to or
+resolve consumer complaints and hold them more accountable. The Bureau could
+follow up with unresponsive companies directly and press them to provide more
+detailed, tailored responses (and resolutions), both publicly and privately. If no progress
+is made, the business should be slated for scrutiny by the agency’s supervision and
+examination staff. Businesses should be examined and expected to have a complaint
+escalation process that consumers can turn to for resolution, as is now required of
+mortgage servicers.
+13. Offer further recourse. When complaint resolution is not available to consumers, the
+Bureau should provide written suggestions as to where the consumer might turn next
+for recourse (e.g., state AG, small claims court, trade association/FINRA, etc.).
+14. Publicize Bureau actions taken as a direct result of complaints. When further CFPB
+action (e.g., lawsuit, settlement, new rule) results from a consumer complaint, the
+consumer should be notified directly by the Bureau in a timely manner. The action
+should be reported to the public, as well, to expand awareness and use of the complaint
+tool.
+15. Dispute option. The Bureau should provide one last step in the complaint process that
+offers consumers stronger recourse if a company has been unresponsive to their
+complaints. If a consumer provides the CFPB with detailed negative feedback in the
+upcoming satisfaction rating scale, the Bureau should consider taking further action
+against a company that has numerous unresolved or outstanding (no response)
+complaints. Action could include private communication between the Bureau and the
+business, deeper examination or investigation of the company or, if warranted,
+enforcement action.
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 22Consumer Action
+www.consumer-action.org
+Consumer advice and referral hotline: 415-777-9635
+Chinese, English and Spanish spoken
+Submit your complaints online:
+English: www.consumer-action.org/hotline/complaint_form/
+Spanish: www.consumer-action.org/hotline/complaint_form_es/
+About this report
+Research was conducted between February and July 2016 by Josue Chavez (2016 Columbia
+University Virtual Intern) and the following staff members: Alegra Howard, Ruth Susswein and
+Monica Steinisch.
+Terms of Use
+This report by Consumer Action can be used freely and reproduced for educational purposes.
+No commercial use is allowed. © Consumer Action 2016
+Consumer Action Report: CFPB Consumer Complaint Database, August 2016 23
