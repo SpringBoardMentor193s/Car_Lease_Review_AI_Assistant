@@ -1,0 +1,61 @@
+{
+  "title": "FairnessReport",
+  "description": "Final structured output of the fairness evaluation engine.",
+  "type": "object",
+  "properties": {
+    "overall_score": {
+      "title": "Overall Score",
+      "minimum": "0",
+      "maximum": "100",
+      "type": "number"
+    },
+    "verdict": {
+      "$ref": "#/definitions/Verdict"
+    },
+    "subscores": {
+      "title": "Subscores",
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "red_flags": {
+      "title": "Red Flags",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "explanations": {
+      "title": "Explanations",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "default": "1.0.0",
+      "type": "string"
+    }
+  },
+  "required": [
+    "overall_score",
+    "verdict",
+    "subscores"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "Verdict": {
+      "title": "Verdict",
+      "description": "An enumeration.",
+      "enum": [
+        "Excellent",
+        "Fair",
+        "Risky",
+        "Unfavorable"
+      ],
+      "type": "string"
+    }
+  }
+}
