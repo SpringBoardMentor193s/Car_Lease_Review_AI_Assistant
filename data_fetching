@@ -1,0 +1,104 @@
+import os
+import requests
+import pdfplumber
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import google.generativeai as genai
+from pydantic import BaseModel
+
+app = Flask(__name__)
+CORS(app)
+
+GEMINI_API_KEY = "sample_key"
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-pro")
+
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+class LeaseSLA(BaseModel):
+    apr: str
+    lease_term: str
+    monthly_payment: str
+    down_payment: str
+    residual_value: str
+    mileage_limit: str
+    early_termination_fee: str
+    red_flags: list[str]
+    fairness_score: int
+
+def extract_text_from_pdf(path):
+    text = ""
+    with pdfplumber.open(path) as pdf:
+        for page in pdf.pages:
+            t = page.extract_text()
+            if t:
+                text += t + "\n"
+    return text.strip()
+
+@app.route("/")
+def status():
+    return {"status": "online"}
+
+@app.route("/api/vehicle-details/<vin>", methods=["GET"])
+def get_vehicle(vin):
+    if len(vin) != 17:
+        return jsonify({"error": "VIN must be 17 characters"}), 400
+
+    try:
+        vin_url = f"https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/{vin}?format=json"
+        specs = requests.get(vin_url).json()["Results"][0]
+        cleaned = {k: v for k, v in specs.items() if v and v not in ["0", "Not Applicable"]}
+
+        recall_url = "https://api.nhtsa.gov/recalls/recallsByVehicle"
+        recalls = requests.get(recall_url, params={
+            "make": specs.get("Make"),
+            "model": specs.get("Model"),
+            "modelYear": specs.get("ModelYear"),
+            "format": "json"
+        }).json()
+
+        return jsonify({
+            "specifications": cleaned,
+            "recalls": recalls.get("results", []),
+            "recall_count": recalls.get("Count", 0)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/analyze-contract", methods=["POST"])
+def analyze_contract():
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    pdf = request.files["file"]
+    path = os.path.join(UPLOAD_FOLDER, pdf.filename)
+    pdf.save(path)
+
+    text = extract_text_from_pdf(path)
+
+    if not text:
+        return jsonify({
+            "error": "This PDF contains no selectable text. Scanned PDFs are not supported."
+        }), 400
+
+    prompt = """
+    Analyze this car lease contract.
+    Extract APR, lease term, monthly payment, down payment,
+    residual value, mileage limit, early termination fee.
+    Identify red flags and provide a fairness score (1-100).
+    Return JSON only.
+    """
+
+    try:
+        response = model.generate_content(
+            prompt + "\n\n" + text
+        )
+
+        return jsonify(response.text)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
