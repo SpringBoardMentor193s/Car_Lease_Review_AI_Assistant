@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+venv/
+
+# Database
+contracts.db
+
+# Storage / uploads
+storage/
+
+# OS
+.DS_Store
