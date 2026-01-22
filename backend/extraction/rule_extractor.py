@@ -1,77 +1,45 @@
 import re
-from backend.schemas.sla_schema import SLA_FIELDS
 
 
 def extract_sla_fields(text: str):
-    # Start with full SLA schema
-    data = SLA_FIELDS.copy()
+    data = {}
 
-    # Interest Rate / APR
-    apr = re.search(r"\bAPR\b\s*[:\-]?\s*([\d.]+%)", text, re.IGNORECASE)
-    if apr:
-        data["interest_rate"] = apr.group(1)
+    # Lease Term
+    m = re.search(r"Lease Term:\s*(\d+)\s*months", text, re.IGNORECASE)
+    data["lease_term_months"] = m.group(1) if m else None
 
-    # Lease term (months)
-    term = re.search(r"(\d{2,3})\s+months", text, re.IGNORECASE)
-    if term:
-        data["lease_term_months"] = term.group(1)
+    # Monthly Payment
+    m = re.search(r"Monthly Payment:\s*\$?([\d,]+\.?\d*)", text, re.IGNORECASE)
+    data["monthly_payment"] = m.group(1) if m else None
 
-    # Monthly payment
-    payment = re.search(
-        r"\$\s?([\d,]+\.\d{2})\s+(per\s+month|monthly)",
-        text,
-        re.IGNORECASE
-    )
-    if payment:
-        data["monthly_payment"] = payment.group(1)
+    # Interest Rate
+    m = re.search(r"Interest Rate:\s*([\d\.]+)%", text, re.IGNORECASE)
+    data["interest_rate"] = m.group(1) if m else None
 
-    # Down payment
-    down = re.search(
-        r"(down payment|initial payment)\s*[:\-]?\s*\$?\s*([\d,]+\.\d{2})",
-        text,
-        re.IGNORECASE
-    )
-    if down:
-        data["down_payment"] = down.group(2)
+    # Down Payment
+    m = re.search(r"Down Payment:\s*\$?([\d,]+\.?\d*)", text, re.IGNORECASE)
+    data["down_payment"] = m.group(1) if m else None
 
-    # Residual value
-    residual = re.search(
-        r"residual value[^\$]*\$?\s*([\d,]+\.\d{2})",
-        text,
-        re.IGNORECASE
-    )
-    if residual:
-        data["residual_value"] = residual.group(1)
+    # Residual Value
+    m = re.search(r"Residual Value:\s*\$?([\d,]+\.?\d*)", text, re.IGNORECASE)
+    data["residual_value"] = m.group(1) if m else None
 
-    # Mileage limit
-    mileage = re.search(
-        r"(\d{4,6})\s+(miles|kilometers)\s+per\s+year",
-        text,
-        re.IGNORECASE
-    )
-    if mileage:
-        data["mileage_limit"] = mileage.group(1)
+    # Buyout Price
+    m = re.search(r"Buyout Price.*?:\s*\$?([\d,]+\.?\d*)", text, re.IGNORECASE)
+    data["buyout_price"] = m.group(1) if m else None
 
-    # Late fees
-    late = re.search(
-        r"(late fee|late charge)[^\$]*\$?\s*([\d,]+\.\d{2})",
-        text,
-        re.IGNORECASE
-    )
-    if late:
-        data["late_fees"] = late.group(2)
+    # Mileage Limit
+    m = re.search(r"Mileage Limit:\s*([\d,]+.*?/year)", text, re.IGNORECASE)
+    data["mileage_limit"] = m.group(1) if m else None
 
-    # Buyout / purchase option
-    buyout = re.search(
-        r"(purchase option|buyout)[^\$]*\$?\s*([\d,]+\.\d{2})",
-        text,
-        re.IGNORECASE
-    )
-    if buyout:
-        data["buyout_price"] = buyout.group(2)
-
-    # Early termination clause (text-based)
-    if "early termination" in text.lower():
+    # Early Termination
+    if re.search(r"Early Termination", text, re.IGNORECASE):
         data["early_termination"] = "Clause present"
+    else:
+        data["early_termination"] = None
+
+    # Late Fees
+    m = re.search(r"Late Fees:\s*([^\n]+)", text, re.IGNORECASE)
+    data["late_fees"] = m.group(1).strip() if m else None
 
     return data
