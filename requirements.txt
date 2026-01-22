@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-multipart
+python-dotenv
+pytesseract
+pillow
+requests
+streamlit
+pandas
+openai
+google-generativeai
+anthropic
