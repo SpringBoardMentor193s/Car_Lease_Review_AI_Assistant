@@ -1,0 +1,45 @@
+**Feature Extraction from PDF or Image**
+
+Supports contract uploads in:
+
+PDF format (digital or scanned)
+
+Image format (JPG, PNG, etc.)
+
+Uses Optical Character Recognition (OCR) to convert non-editable documents into machine-readable text.
+
+Handles:
+
+Scanned contracts
+
+Mobile photos of documents
+
+Multi-page PDFs
+
+After OCR, the extracted text is processed using Large Language Models (LLMs) to identify key contractual and financial features.
+
+Key features extracted include:
+
+Interest rate (APR)
+
+Lease or loan tenure
+
+Monthly installment amount
+
+Total payable cost over contract period
+
+Mileage limits and overage charges
+
+Early termination conditions and fees
+
+Late payment penalties
+
+Hidden or additional charges
+
+Extracted features are:
+
+Converted into structured data (JSON)
+
+Stored in the database
+
+Displayed in a user-friendly summary format
