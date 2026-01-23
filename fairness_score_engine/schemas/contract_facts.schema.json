@@ -51,6 +51,19 @@
     },
     "maintenance_responsibility": {
       "$ref": "#/definitions/MaintenanceResponsibility"
+    },
+    "buyout_price": {
+      "title": "Buyout Price",
+      "minimum": "0",
+      "type": "number"
+    },
+    "warranty_coverage": {
+      "title": "Warranty Coverage",
+      "type": "string"
+    },
+    "insurance_coverage": {
+      "title": "Insurance Coverage",
+      "type": "string"
     }
   },
   "required": [
