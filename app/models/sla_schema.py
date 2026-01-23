@@ -1,59 +1,27 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 
 class SLASummary(BaseModel):
     # Financial Terms
-    interest_rate_apr: Optional[float] = Field(
-        None, description="Annual Percentage Rate (APR) of the lease"
-    )
-    lease_term_months: Optional[int] = Field(
-        None, description="Lease duration in months"
-    )
-    monthly_payment: Optional[float] = Field(
-        None, description="Monthly lease payment amount"
-    )
-    down_payment: Optional[float] = Field(
-        None, description="Initial down payment amount"
-    )
-    residual_value: Optional[float] = Field(
-        None, description="Residual value of the vehicle at lease end"
-    )
-    purchase_option_price: Optional[float] = Field(
-        None, description="Buyout price if the lessee chooses to purchase"
-    )
+    interest_rate_apr: Optional[float] = None
+    lease_term_months: Optional[int] = None
+    monthly_payment: Optional[float] = None
+    down_payment: Optional[float] = None
+    residual_value: Optional[float] = None
+    purchase_option_price: Optional[float] = None
 
     # Usage & Mileage
-    mileage_allowance_km_per_year: Optional[int] = Field(
-        None, description="Allowed mileage per year"
-    )
-    mileage_overage_fee_per_km: Optional[float] = Field(
-        None, description="Charge per extra kilometer beyond allowance"
-    )
+    mileage_allowance_km_per_year: Optional[int] = None
+    mileage_overage_fee_per_km: Optional[float] = None
 
-    # Legal & Responsibility Clauses
-    early_termination_clause: Optional[str] = Field(
-        None, description="Conditions and penalties for early termination"
-    )
-    maintenance_responsibility: Optional[str] = Field(
-        None, description="Who is responsible for maintenance and repairs"
-    )
-    warranty_coverage: Optional[str] = Field(
-        None, description="Warranty details and coverage period"
-    )
-    insurance_requirement: Optional[str] = Field(
-        None, description="Insurance obligations of the lessee"
-    )
-    late_fee_penalties: Optional[str] = Field(
-        None, description="Late payment penalties or fees"
-    )
+    # Legal & Responsibility Clauses (DICT ONLY)
+    early_termination_clause: Optional[Dict[str, Any]] = None
+    maintenance_responsibility: Optional[str] = None
+    warranty_coverage: Optional[Dict[str, Any]] = None
+    insurance_requirement: Optional[str] = None
+    late_fee_penalties: Optional[Dict[str, Any]] = None
 
-    # Risk & Fairness Analysis
-    red_flags: List[str] = Field(
-        default_factory=list,
-        description="List of risky or unfair contract clauses"
-    )
-    fairness_score: Optional[int] = Field(
-        None,
-        description="Overall contract fairness score (0–100)"
-    )
+    # Risk & Fairness
+    red_flags: List[str] = []
+    fairness_score: Optional[float] = None

@@ -126,7 +126,7 @@ def analyze_contract(contract_id: str, mode: str = "rule"):
     text = row["extracted_text"]
     vin = row["vin"]
 
-    # -------- SLA Extraction --------
+    # ---------- SLA Extraction ----------
     if mode == "llm":
         sla = extract_sla_llm_based(text)
     elif mode == "hybrid":
@@ -134,16 +134,20 @@ def analyze_contract(contract_id: str, mode: str = "rule"):
     else:
         sla = extract_sla_rule_based(text)
 
-    # Ensure SLA is dict
+    # Normalize SLA to dict
     if hasattr(sla, "dict"):
         sla_dict = sla.dict()
-    else:
+    elif isinstance(sla, dict):
         sla_dict = sla
+    else:
+        sla_dict = {}
 
-    # -------- VIN Lookup --------
-    vehicle = lookup_vehicle_by_vin(vin)
+    # ---------- VIN Lookup ----------
+    vehicle = None
+    if vin:
+        vehicle = lookup_vehicle_by_vin(vin)
 
-    # -------- Save to DB --------
+    # ---------- Save to DB ----------
     cursor.execute("""
         UPDATE contracts
         SET sla_json = ?, vehicle_json = ?
@@ -192,3 +196,10 @@ def update_contract_vin(contract_id: str, vin: str = Body(..., embed=True)):
         "vin": vin,
         "status": "VIN updated successfully"
     }
+
+@router.get("/vin/{vin}")
+def get_vehicle_by_vin(vin: str):
+    vehicle = lookup_vehicle_by_vin(vin)
+    if not vehicle:
+        raise HTTPException(404, "Vehicle not found")
+    return vehicle
