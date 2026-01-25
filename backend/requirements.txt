@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-dotenv
+
+# OCR
+pytesseract
+pdf2image
+Pillow
+
+# Database
+sqlite-utils
+
+# LLM (Google Gemini – official SDK)
+google-genai
+
+# HTTP requests
+requests
