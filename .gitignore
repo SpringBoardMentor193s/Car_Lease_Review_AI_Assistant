@@ -1,4 +1,4 @@
-*.db
 .env
 __pycache__/
-.ipynb_checkpoints/
+*.pyc
+car_lease.db
