@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Optional
 from datetime import date
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, validator, root_validator
 
 
 class MaintenanceResponsibility(str, Enum):
@@ -40,8 +40,7 @@ class ContractFacts(BaseModel):
     warranty_coverage: Optional[str] = None
     insurance_coverage: Optional[str] = None
 
-    @field_validator("apr", "monthly_payment", "down_payment", "overage_fee_per_mile", "residual_value_percent", mode='before')
-    @classmethod
+    @validator("apr", "monthly_payment", "down_payment", "overage_fee_per_mile", "residual_value_percent", pre=True)
     def parse_decimals(cls, v):
         if v is None:
             return v
@@ -51,28 +50,28 @@ class ContractFacts(BaseModel):
 
     # ---------- Validation ----------
 
-    @field_validator("apr")
+    @validator("apr")
     def validate_apr(cls, v: Decimal) -> Decimal:
         if v > Decimal("25"):
             raise ValueError(f"APR of {v}% exceeds reasonable threshold of 25%")
         return v.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
 
-    @field_validator("monthly_payment", "down_payment", "overage_fee_per_mile")
+    @validator("monthly_payment", "down_payment", "overage_fee_per_mile")
     def round_money(cls, v: Optional[Decimal]) -> Optional[Decimal]:
         if v is not None:
             return v.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         return v
 
-    @field_validator("residual_value_percent")
+    @validator("residual_value_percent")
     def round_residual(cls, v: Optional[Decimal]) -> Optional[Decimal]:
         if v is not None:
             return v.quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
         return v
 
-    @model_validator(mode='after')
+    @root_validator
     def validate_down_payment(cls, values):
-        monthly = values.monthly_payment
-        down = values.down_payment
+        monthly = values.get("monthly_payment")
+        down = values.get("down_payment")
         if monthly and down and down > monthly * 24:
             raise ValueError("Down payment exceeds 24 months of payments")
         return values

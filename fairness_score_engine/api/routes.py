@@ -9,10 +9,16 @@ from typing import List
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
-from .schemas import ExtractionResult, ExtractionError, ContractFactsResponse
+from .schemas import (
+    ExtractionResult,
+    ExtractionError,
+    ContractFactsResponse,
+    VinReportResponse,
+)
 from .dependencies import get_extract_pipeline, get_db
 from database.db import ContractFactsDB
 from pipelines.extract_pipeline import ExtractPipeline
+from engine.vin_report import generate_vin_report
 
 router = APIRouter()
 
@@ -87,23 +93,20 @@ async def extract_contract_facts(
 
 @router.get("/contracts", response_model=List[ContractFactsResponse])
 async def get_all_contracts(db: ContractFactsDB = Depends(get_db)):
-    """
-    Retrieve all stored contract facts.
-    """
+    """Retrieve all stored contract facts."""
     try:
         records = db.get_all_contract_facts()
         return [ContractFactsResponse(**record) for record in records]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database query failed: {str(e)}")
 
+
 @router.get("/contracts/{record_id}", response_model=ContractFactsResponse)
 async def get_contract_by_id(
     record_id: int,
-    db: ContractFactsDB = Depends(get_db)
+    db: ContractFactsDB = Depends(get_db),
 ):
-    """
-    Retrieve a specific contract by ID.
-    """
+    """Retrieve a specific contract by ID."""
     try:
         records = db.get_all_contract_facts()
         record = next((r for r in records if r['id'] == record_id), None)
@@ -114,3 +117,16 @@ async def get_contract_by_id(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database query failed: {str(e)}")
+
+
+@router.get("/vin-report/{vin}", response_model=VinReportResponse)
+async def get_vin_report(vin: str):
+    """Generate a VIN-based vehicle history and risk report.
+
+    - **vin**: 17-character Vehicle Identification Number
+    """
+    try:
+        report = generate_vin_report(vin)
+        return report
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"VIN report generation failed: {str(e)}")

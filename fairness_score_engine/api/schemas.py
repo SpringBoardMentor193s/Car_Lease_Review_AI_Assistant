@@ -6,21 +6,27 @@ from typing import Optional, Dict, Any
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class ExtractionResult(BaseModel):
     """Response schema for extraction results"""
+
     record_id: int
     extracted_data: Dict[str, Any]
     status: str = "success"
     message: str = "PDF processed successfully"
 
+
 class ExtractionError(BaseModel):
     """Error response schema"""
+
     status: str = "error"
     message: str
     details: Optional[Dict[str, Any]] = None
 
+
 class ContractFactsResponse(BaseModel):
     """Response schema for retrieving stored contract facts"""
+
     id: int
     apr: Optional[float]
     monthly_payment: Optional[float]
@@ -38,4 +44,16 @@ class ContractFactsResponse(BaseModel):
     created_at: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+
+
+class VinReportResponse(BaseModel):
+    """Response schema for VIN-based vehicle history and risk report."""
+
+    vehicle_identity: Dict[str, Any]
+    recall_history: Dict[str, Any]
+    theft_and_salvage: Dict[str, Any]
+    odometer_analysis: Dict[str, Any]
+    paid_reports: Dict[str, Any]
+    meta: Dict[str, Any]
+    human_summary: str
