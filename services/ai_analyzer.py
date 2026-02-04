@@ -15,7 +15,7 @@ class AIAnalyzer:
             context = self._build_context(analysis_request)
             
             prompt = f"""
-            Analyze this car lease contract and provide detailed insights.
+            Analyze this car lease contract and provide detailed insights and negotitate the price for the user.
             
             CONTEXT:
             {context}
