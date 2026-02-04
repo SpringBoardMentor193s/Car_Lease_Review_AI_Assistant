@@ -32,12 +32,16 @@ SAVE_ORIGINAL_PDFS = True  # Set to False to delete PDFs after processing
 @router.post("/extract", response_model=ExtractionResult)
 async def extract_contract_facts(
     file: UploadFile = File(...),
+    use_llm: bool = True,
+    use_ocr: bool = False,
     pipeline: ExtractPipeline = Depends(get_extract_pipeline)
 ):
     """
     Upload a PDF and extract contract facts.
 
     - **file**: PDF file containing the car lease agreement
+    - **use_llm**: Use LLM (Llama 3) for extraction (recommended for real contracts, default: True)
+    - **use_ocr**: Force OCR for scanned PDFs (default: False)
     - Returns extraction results and database record ID
     """
     # Validate file type
@@ -66,7 +70,7 @@ async def extract_contract_facts(
             processing_path = temp_path
 
         # Run extraction pipeline
-        record_id = pipeline.run(str(processing_path))
+        record_id = pipeline.run(str(processing_path), use_ocr=use_ocr, use_llm=use_llm)
 
         if record_id is None:
             raise HTTPException(status_code=422, detail="Failed to extract contract facts from PDF")
