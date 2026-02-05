@@ -1,0 +1,55 @@
+body {
+    font-family: Arial;
+    background: #f5f7fb;
+    text-align: center;
+}
+
+.upload {
+    border: 2px dashed #4caf50;
+    padding: 30px;
+    width: 60%;
+    margin: auto;
+    background: white;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+.analyze {
+    background: #1d4ed8;
+}
+
+.bar {
+    width: 60%;
+    height: 12px;
+    background: #ddd;
+    margin: auto;
+}
+
+#scoreBar {
+    height: 100%;
+    background: #22c55e;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 70%;
+    margin: auto;
+}
+
+.grid div {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.red { color: #dc2626; }
+.green { color: #16a34a; }

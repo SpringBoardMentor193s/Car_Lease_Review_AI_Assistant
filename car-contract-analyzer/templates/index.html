@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contract Review</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h2>CONTRACT REVIEW</h2>
+<h1>Upload Your Contract for Analysis</h1>
+<p>Drop your lease or loan agreement and get instant AI-powered insights.</p>
+
+<div class="upload" id="upload">
+    <input type="file" id="file" hidden>
+    <p>Drag & Drop Your Contract</p>
+    <button onclick="pick()">Browse Files</button>
+</div>
+
+<button class="analyze" onclick="analyze()">Analyze Contract</button>
+
+<div id="result" hidden>
+    <h3>Contract Fairness Score</h3>
+    <div class="bar">
+        <div id="scoreBar"></div>
+    </div>
+    <span id="scoreText"></span>
+
+    <h3>Extracted Terms</h3>
+    <div class="grid" id="terms"></div>
+
+    <h3 class="red">Red Flags</h3>
+    <ul id="flags"></ul>
+
+    <h3 class="green">Recommendations</h3>
+    <ul id="recs"></ul>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,1 +1,3 @@
 requests
+flask
+PyPDF2
