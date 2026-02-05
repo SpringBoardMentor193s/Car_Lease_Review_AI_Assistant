@@ -1,7 +1,11 @@
 fastapi
 uvicorn
 python-multipart
+sqlalchemy
 pytesseract
 pdf2image
 Pillow
-sqlalchemy
+python-dotenv
+openai
+requests
+
