@@ -1,52 +1,45 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+import shutil
+import os
 
-# Import your existing logic
 from backend.pipeline.process_contract import process_contract
-from backend.llm.negotiation_chatbot import negotiation_chat
 
-app = FastAPI(title = "Car Lease AI Assistant")
+app = FastAPI(title="Car Lease Contract AI")
 
-# ---------- Request Schemas ----------
+# Allow frontend access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-class ContractRequest(BaseModel):
-    pdf_path: str
+UPLOAD_DIR = "uploaded_contracts"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-
-class ChatRequest(BaseModel):
-    sla_data: dict
-    user_message: str
-
-
-# ---------- Health Check ----------
 
 @app.get("/")
-def health():
-    return {"status": "Backend running successfully"}
+def health_check():
+    return {"status": "Backend is running"}
 
 
-# ---------- Contract Processing API ----------
-
-@app.post("/process-contract")
-def process_contract_api(request: ContractRequest):
+@app.post("/analyze-contract")
+async def analyze_contract(file: UploadFile = File(...)):
     """
-    Takes a PDF path, runs OCR + LLM + VIN pipeline,
-    and returns structured contract analysis.
+    Upload a lease/loan contract PDF and get analysis.
     """
-    result = process_contract(request.pdf_path)
+    if not file.filename.endswith(".pdf"):
+        return {"error": "Only PDF files are supported"}
+
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+    # Save uploaded PDF
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Run your full pipeline
+    result = process_contract(file_path)
+
     return result
-
-
-# ---------- Negotiation Chatbot API ----------
-
-@app.post("/chat")
-def chat_api(request: ChatRequest):
-    """
-    Takes extracted SLA data + user message
-    and returns AI-powered negotiation advice.
-    """
-    reply = negotiation_chat(
-        request.sla_data,
-        request.user_message
-    )
-    return {"response": reply}
