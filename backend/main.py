@@ -26,6 +26,7 @@ from backend.analysis.risk_engine import calculate_lease_risk
 from backend.analysis.advisor import generate_lease_advice
 from backend.analysis.summary_engine import generate_contract_summary
 from backend.analysis.negotiator import negotiate_with_user
+from backend.analysis.fairness_engine import calculate_fairness_score
 
 
 app = FastAPI()
@@ -105,6 +106,14 @@ async def upload_contract(file: UploadFile = File(...)):
         safety_rating,
         risk_assessment
     )
+    fairness_score = calculate_fairness_score(
+    final_sla,
+    risk_assessment,
+    vehicle_data,
+    recall_data,
+    safety_rating
+)
+
 
     # ✅ FINAL RESPONSE
     return {
@@ -119,6 +128,7 @@ async def upload_contract(file: UploadFile = File(...)):
         "ai_advice": ai_advice,
         "contract_summary": contract_summary,
         "safety_rating": safety_rating,
+        "fairness_score": fairness_score,
         "preview": extracted_text[:500],
     }
 
