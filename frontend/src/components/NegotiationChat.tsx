@@ -12,7 +12,7 @@ export default function NegotiationChat() {
       id: "1",
       role: "assistant",
       content:
-        "👋 Hi! I’m your **Car Lease Negotiation Assistant**.\n\n" +
+        " Hi! I’m your **Car Lease Negotiation Assistant**.\n\n" +
         "I help you understand car lease agreements and negotiate better terms.\n\n" +
         "You can ask about:\n" +
         "• Monthly lease payments\n" +
@@ -50,19 +50,19 @@ export default function NegotiationChat() {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content:
-          "🔍 **Lease Analysis & Negotiation Guidance**\n\n" +
-          "📉 **Negotiable Areas**\n" +
+          " **Lease Analysis & Negotiation Guidance**\n\n" +
+          " **Negotiable Areas**\n" +
           "• Monthly payment can often be reduced\n" +
           "• APR / money factor is usually negotiable\n" +
           "• Mileage allowance can be increased\n" +
           "• High down payment is not mandatory\n\n" +
-          "📝 **What to Say to the Dealer**\n" +
+          "**What to Say to the Dealer**\n" +
           "“I’ve reviewed similar lease offers. If we adjust the money factor and mileage allowance, I’m ready to proceed today.”\n\n" +
-          "⚠️ **Dealer Tactics to Watch**\n" +
+          " **Dealer Tactics to Watch**\n" +
           "• Focusing only on monthly payment\n" +
           "• Adding unnecessary accessories\n" +
           "• Claiming APR is fixed\n\n" +
-          "💰 **Potential Savings**\n" +
+          "**Potential Savings**\n" +
           "Lower APR and fees can save thousands over the lease term.\n\n" +
           "Tell me your **lease duration, monthly payment, APR, and mileage limit** for more precise advice.",
       };
