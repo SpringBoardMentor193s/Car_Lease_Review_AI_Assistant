@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VIN Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔎 VIN Analyzer</h1>
+            <p class="subtitle">Decode a VIN and get SLA-like vehicle metadata and checks</p>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="home.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">← Home</a>
+                <a href="index.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">SLA Extractor</a>
+                <a href="chat.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">💬 Chat Assistant</a>
+            </div>
+        </header>
+
+        <div class="upload-card">
+            <h2>Analyze VIN</h2>
+            <div style="margin-bottom:1rem;">
+                <input id="vinInput" type="text" placeholder="Enter VIN (17 chars)" style="width:100%;padding:0.75rem;border-radius:0.5rem;border:1px solid #e2e8f0;" />
+            </div>
+            <div style="display:flex;gap:0.5rem;">
+                <button id="btnAnalyze" class="btn-refresh">Analyze</button>
+                <button id="btnClear" class="btn-refresh" style="background:#9CA3AF;">Clear</button>
+            </div>
+        </div>
+
+        <div class="results-card" id="vinResults" style="display:none;margin-top:1.5rem;">
+            <h2>VIN Analysis Result</h2>
+            <div id="vinResultContent" class="result-content"></div>
+        </div>
+
+        <div style="margin-top:2rem;">
+            <a href="index.html">← Back to SLA Extractor</a>
+        </div>
+    </div>
+
+    <script src="vin.js"></script>
+</body>
+</html>

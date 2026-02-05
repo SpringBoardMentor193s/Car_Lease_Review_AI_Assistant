@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Lease Project</title>
+    <link rel="stylesheet" href="home-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-section">
+                <svg class="logo-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path>
+                    <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                </svg>
+                <div>
+                    <h1>Car Lease Project</h1>
+                    <p class="subtitle">Smart Contract Analysis & VIN Verification</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span id="statusText">Checking connection...</span>
+            </div>
+        </div>
+
+        <main class="modules-grid">
+            <!-- SLA Extractor Card -->
+            <div class="module-card" onclick="window.location.href='index.html'">
+                <div class="module-icon" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <div class="module-content">
+                    <h2>SLA Extractor</h2>
+                    <p>Upload and analyze car lease contracts. Extract SLA parameters, identify red flags, and get fairness scores.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">📄 Document Upload</span>
+                        <span class="feature-tag">🔍 AI Analysis</span>
+                        <span class="feature-tag">⚠️ Red Flags</span>
+                        <span class="feature-tag">📊 Fairness Score</span>
+                    </div>
+                </div>
+                <div class="module-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- VIN Analyzer Card -->
+            <div class="module-card" onclick="window.location.href='vin.html'">
+                <div class="module-icon" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </div>
+                <div class="module-content">
+                    <h2>VIN Analyzer</h2>
+                    <p>Decode Vehicle Identification Numbers instantly. Get comprehensive vehicle metadata, validation, and verification.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">🚗 VIN Decode</span>
+                        <span class="feature-tag">✓ Validation</span>
+                        <span class="feature-tag">📋 Metadata</span>
+                        <span class="feature-tag">🔒 Verification</span>
+                    </div>
+                </div>
+                <div class="module-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Negotiation Assistant Card -->
+            <div class="module-card" onclick="window.location.href='chat.html'">
+                <div class="module-icon" style="background: linear-gradient(135deg, #047857 0%, #059669 100%);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M9 10h.01"></path>
+                        <path d="M15 10h.01"></path>
+                        <path d="M9.5 15a3.5 3.5 0 0 0 5 0"></path>
+                    </svg>
+                </div>
+                <div class="module-content">
+                    <h2>Negotiation Assistant</h2>
+                    <p>Chat with AI to get expert advice on negotiating lease terms, identifying unfair clauses, and crafting counter-offers.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">💬 AI Chat</span>
+                        <span class="feature-tag">💡 Expert Advice</span>
+                        <span class="feature-tag">📧 Email Templates</span>
+                        <span class="feature-tag">🎯 Strategy Tips</span>
+                    </div>
+                </div>
+                <div class="module-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <p>Powered by AI • Secure & Confidential</p>
+        </footer>
+    </div>
+
+    <script src="home-script.js"></script>
+</body>
+</html>

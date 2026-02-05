@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload & Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 SLA Extractor</h1>
+            <p class="subtitle">Upload files and extract information using AI</p>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="home.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">← Home</a>
+                <a href="vin.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">VIN Analyzer</a>
+                <a href="chat.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">💬 Chat Assistant</a>
+            </div>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span id="statusText">Checking connection...</span>
+            </div>
+        </div>
+
+        <main>
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2>Upload File</h2>
+                    <div class="upload-area" id="uploadArea">
+                        <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p class="upload-text">Drag and drop file here or click to browse</p>
+                        <p class="upload-hint">Supported: TXT, PDF, DOC, DOCX, JPG, PNG (Max 16MB)</p>
+                        <input type="file" id="fileInput" hidden>
+                    </div>
+                    <div class="upload-progress" id="uploadProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">Uploading...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <h2>Contract Analysis</h2>
+                    <div class="result-content" id="resultContent">
+                        <!-- Structured SLA summary, red flags, and fairness score will be displayed here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Negotiation Assistant removed -->
+
+            <!-- Files List Section -->
+            <section class="files-section">
+                <div class="files-card">
+                    <div class="section-header">
+                        <h2>Recent Files</h2>
+                        <div style="display:flex;gap:0.5rem;align-items:center;">
+                            <a href="vin.html" class="btn-refresh" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">VIN Analyzer</a>
+                            <button class="btn-refresh" id="btnRefresh">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                            </svg>
+                            Refresh
+                        </button>
+                        </div>
+                    </div>
+                    <div class="files-list" id="filesList">
+                        <!-- Files will be listed here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal" id="fileModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">File Details</h3>
+                <button class="btn-close" id="btnCloseModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- File details will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
