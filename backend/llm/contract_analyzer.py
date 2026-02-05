@@ -12,7 +12,7 @@ client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
-# Use a stable, supported Gemini model
+# Use a Gemini model
 MODEL_NAME = "gemini-2.5-flash"
 
 def extract_sla(contract_text: str) -> dict:
@@ -45,7 +45,6 @@ Contract text:
 
         raw_output = response.text.strip()
 
-        # 🔧 Remove markdown fences if Gemini adds them
         if raw_output.startswith("```"):
             raw_output = raw_output.split("```")[1]
             if raw_output.strip().startswith("json"):
