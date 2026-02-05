@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lease Document Analyzer</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Lease Document Analyzer</h1>
+
+      {% if message %}
+      <div class="flash">{{ message }}</div>
+      {% endif %}
+
+      <section class="card">
+        <h2>Run OCR</h2>
+        <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+          <input type="file" name="file" accept=".pdf,.png,.jpg,.jpeg,.tif,.tiff,.webp" required>
+          <button type="submit">Process</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Debug with Text</h2>
+        <form action="/debug-text" method="post" enctype="multipart/form-data" class="debug-form">
+          <textarea name="debug_text" rows="6" placeholder="Paste plain text for SLA extraction">{{ debug_text or '' }}</textarea>
+          <div class="debug-inputs">
+            <label class="file-label">
+              <span>or select a .txt file</span>
+              <input type="file" name="debug_file" accept=".txt">
+            </label>
+            <button type="submit">Run Extraction</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Debug VIN</h2>
+        <form action="/debug-vin" method="post" class="vin-form">
+          <input type="text" name="vin_input" placeholder="Enter 17-character VIN" value="{{ vin_value or '' }}">
+          <button type="submit">Decode VIN</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Negotiation Assistant</h2>
+        <form action="/negotiate" method="post" class="negotiation-form">
+          <div class="form-grid">
+            <label>
+              Target monthly payment
+              <input type="text" name="target_monthly" placeholder="$350" value="{{ negotiation_inputs.target_monthly_payment or '' }}">
+            </label>
+            <label>
+              Due at signing
+              <input type="text" name="target_due" placeholder="$2,000" value="{{ negotiation_inputs.target_due_at_signing or '' }}">
+            </label>
+            <label>
+              Desired term (months)
+              <input type="text" name="target_term" placeholder="36" value="{{ negotiation_inputs.desired_term_months or '' }}">
+            </label>
+            <label>
+              Max mileage per year
+              <input type="text" name="target_mileage" placeholder="12,000" value="{{ negotiation_inputs.max_mileage_per_year or '' }}">
+            </label>
+            <label>
+              Location
+              <input type="text" name="location" placeholder="City, State" value="{{ negotiation_inputs.location or '' }}">
+            </label>
+            <label>
+              Tone
+              <select name="tone">
+                {% set tone_value = negotiation_inputs.tone or '' %}
+                <option value="" {% if tone_value == '' %}selected{% endif %}>Neutral</option>
+                <option value="polite" {% if tone_value == 'polite' %}selected{% endif %}>Polite</option>
+                <option value="firm" {% if tone_value == 'firm' %}selected{% endif %}>Firm</option>
+                <option value="friendly" {% if tone_value == 'friendly' %}selected{% endif %}>Friendly</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Priorities (e.g., lower monthly, $0 down, shorter term)
+            <input type="text" name="priorities" placeholder="Lower monthly payment, $0 down" value="{{ negotiation_inputs.priorities or '' }}">
+          </label>
+          <label>
+            Extra notes
+            <textarea name="notes" rows="4" placeholder="Any constraints, competing offers, or concerns.">{{ negotiation_inputs.extra_notes or '' }}</textarea>
+          </label>
+          <textarea name="source_text" class="hidden-text">{{ ocr_text or debug_text or '' }}</textarea>
+          <p class="note">Requires OPENROUTER_API_KEY configured on the server.</p>
+          <button type="submit">Generate Negotiation Guidance</button>
+        </form>
+      </section>
+
+      {% if filename %}
+      <div class="file-info">Processed: <strong>{{ filename }}</strong></div>
+      {% if storage_meta %}
+      <div class="file-info">Saved text: {{ storage_meta.path }}</div>
+      {% endif %}
+      {% endif %}
+
+      <div class="toggles">
+        <button type="button" class="toggle-btn" data-target="#ocr-panel">Toggle OCR Output</button>
+        <button type="button" class="toggle-btn" data-target="#sla-panel">Toggle SLA Details</button>
+        <button type="button" class="toggle-btn" data-target="#vin-panel">Toggle VIN Details</button>
+        <button type="button" class="toggle-btn" data-target="#negotiation-panel">Toggle Negotiation Output</button>
+      </div>
+
+      <div id="ocr-panel" class="panel{% if ocr_text or debug_text %} open{% endif %}">
+        <h2>OCR Output</h2>
+        <textarea rows="20" readonly>{{ ocr_text or '' }}</textarea>
+        {% if debug_text %}
+        <p class="note">Debug text loaded without OCR.</p>
+        {% endif %}
+      </div>
+
+      <div id="sla-panel" class="panel{% if sla_fields or sla_clauses %} open{% endif %}">
+        <h2>SLA Extraction</h2>
+        {% if sla_fields %}
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Raw</th>
+              <th>Normalized</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in sla_fields %}
+            <tr>
+              <td>{{ item.label }}</td>
+              <td>{{ item.raw }}</td>
+              <td>{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No SLA fields detected yet.</p>
+        {% endif %}
+
+        {% if sla_clauses %}
+        <div class="clauses">
+          <h3>Clauses</h3>
+          <ul>
+            {% for clause, snippet in sla_clauses.items() %}
+            <li><strong>{{ clause.replace('_', ' ') }}:</strong> {{ snippet or '—' }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+
+      <div id="vin-panel" class="panel{% if vin_details %} open{% endif %}">
+        <h2>Vehicle Details (VIN)</h2>
+        {% if vin_value %}
+        <p><strong>VIN:</strong> {{ vin_value }}</p>
+        {% endif %}
+        {% if vin_details %}
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key, value in vin_details.items() %}
+            <tr>
+              <td>{{ key }}</td>
+              <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No VIN details available yet.</p>
+        {% endif %}
+      </div>
+
+      <div id="negotiation-panel" class="panel{% if negotiation_response or negotiation_error %} open{% endif %}">
+        <h2>Negotiation Assistant</h2>
+        {% if negotiation_error %}
+        <div class="flash">{{ negotiation_error }}</div>
+        {% endif %}
+        {% if negotiation_response %}
+        <p class="note">Model: {{ negotiation_model }}</p>
+        <textarea rows="18" readonly>{{ negotiation_response }}</textarea>
+        {% else %}
+        <p>No negotiation output yet.</p>
+        {% endif %}
+
+        {% if negotiation_payload %}
+        <details class="payload">
+          <summary>View JSON payload sent to model</summary>
+          <textarea rows="14" readonly>{{ negotiation_payload }}</textarea>
+        </details>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.toggle-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const target = document.querySelector(button.dataset.target);
+          if (!target) return;
+          target.classList.toggle('open');
+          if (target.classList.contains('open')) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
