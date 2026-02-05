@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Lease Document Upload</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 50px auto; padding: 20px; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #result { margin-top: 20px; padding: 10px; background: #f0f0f0; display: none; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e9; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <h2>Upload Lease Document</h2>
+    <form id="uploadForm">
+        <input type="text" id="vin" placeholder="Vehicle Number (VIN)" required>
+        <input type="file" id="file" accept=".pdf,.jpg,.jpeg,.png" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const vin = document.getElementById('vin').value;
+            const file = document.getElementById('file').files[0];
+            const result = document.getElementById('result');
+            
+            const formData = new FormData();
+            formData.append('vin', vin);
+            formData.append('file', file);
+            
+            result.style.display = 'block';
+            result.className = '';
+            result.textContent = 'Uploading...';
+            
+            try {
+                const response = await fetch('http://localhost:8001/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.className = 'success';
+                    result.innerHTML = `✓ Success!<br>VIN: ${data.vin}<br>Document ID: ${data.document_id}<br>Status: ${data.status}`;
+                    document.getElementById('uploadForm').reset();
+                } else {
+                    result.className = 'error';
+                    result.textContent = '✗ Error: ' + (data.detail || 'Upload failed');
+                }
+            } catch (error) {
+                result.className = 'error';
+                result.textContent = '✗ Error: Cannot connect to server. Make sure backend is running on port 8001.';
+            }
+        });
+    </script>
+</body>
+</html>

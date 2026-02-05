@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Lease AI - Quick Launcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .launch-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+        
+        .launch-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .launch-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-box li {
+            padding: 5px 0;
+            color: #555;
+        }
+        
+        .info-box li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .links {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .link-button {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .link-button:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .status.show {
+            display: block;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .launch-button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Car Lease AI Assistant</h1>
+        <p class="subtitle">One-Click Startup Launcher</p>
+        
+        <div class="info-box">
+            <h3>What This Does:</h3>
+            <ul>
+                <li>Starts PostgreSQL database</li>
+                <li>Sets up Python environment</li>
+                <li>Installs dependencies</li>
+                <li>Initializes database</li>
+                <li>Launches the API server</li>
+            </ul>
+        </div>
+        
+        <button class="launch-button" onclick="launchApp()">
+            ▶️ Launch Application
+        </button>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="info-box" style="margin-top: 30px;">
+            <h3>📍 Access Points (after launch):</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0;">
+                    <strong>API Server:</strong> 
+                    <a href="http://localhost:8000" target="_blank" style="color: #667eea;">http://localhost:8000</a>
+                </li>
+                <li style="padding: 8px 0;">
+                    <strong>API Docs:</strong> 
+                    <a href="http://localhost:8000/docs" target="_blank" style="color: #667eea;">http://localhost:8000/docs</a>
+                </li>
+                <li style="padding: 8px 0;">
+                    <strong>Database UI:</strong> 
+                    <a href="http://localhost:5050" target="_blank" style="color: #667eea;">http://localhost:5050</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="links">
+            <a href="GOLIVE_GUIDE.md" class="link-button" target="_blank">📖 User Guide</a>
+            <a href="SETUP_POSTGRESQL.md" class="link-button" target="_blank">⚙️ Manual Setup</a>
+            <a href="START_HERE.md" class="link-button" target="_blank">❓ Help</a>
+        </div>
+        
+        <p style="margin-top: 30px; color: #999; font-size: 0.9em;">
+            💡 First run may take 2-5 minutes. Subsequent runs: ~15 seconds
+        </p>
+    </div>
+    
+    <script>
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status show ' + type;
+        }
+        
+        function launchApp() {
+            showStatus('🚀 Launching application... Please check the command window that opens.', 'info');
+            
+            // Try to execute the batch file
+            try {
+                // This will only work in certain contexts (like Electron apps)
+                // For a regular browser, we'll show instructions
+                if (window.require) {
+                    const { exec } = window.require('child_process');
+                    exec('golive.bat', (error, stdout, stderr) => {
+                        if (error) {
+                            showStatus('❌ Error: ' + error.message, 'error');
+                            return;
+                        }
+                        showStatus('✅ Application started! Check the terminal window.', 'success');
+                    });
+                } else {
+                    showStatus('📝 Please double-click golive.bat in File Explorer, or run it from Command Prompt', 'info');
+                    setTimeout(() => {
+                        showStatus('💡 Alternatively, open Command Prompt in this folder and run: golive.bat', 'info');
+                    }, 3000);
+                }
+            } catch (e) {
+                showStatus('📝 Please double-click golive.bat in File Explorer to start the application', 'info');
+            }
+        }
+        
+        // Check if services are running
+        async function checkServices() {
+            try {
+                const response = await fetch('http://localhost:8000/');
+                if (response.ok) {
+                    showStatus('✅ Application is already running!', 'success');
+                }
+            } catch (e) {
+                // Services not running, which is fine
+            }
+        }
+        
+        // Check on page load
+        checkServices();
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+Mobile App (Flutter/REACT)
+        |
+        v
+API Gateway (FastAPI)
+        |
+------------------------------------------------
+|            |            |                   |
+v            v            v                   v
+Document     LLM SLA      VIN & Vehicle        Pricing &
+Processing   Extraction   Data Service         Market Service
+(OCR)                                           
+        |
+        v
+PostgreSQL / Redis / Mongodb 
+        |
+        v
+Negotiation AI Assistant

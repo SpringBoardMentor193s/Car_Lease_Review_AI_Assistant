@@ -1,0 +1,45 @@
+{
+  "vin": "5YJSA1E14HF000001",
+  "nhtsa_vehicle_info": {
+    "Error Code": "1",
+    "Error Text": "1 - Check Digit (9th position) does not calculate properly",
+    "Vehicle Descriptor": "5YJSA1E1*HF",
+    "Make": "TESLA",
+    "Manufacturer Name": "TESLA, INC.",
+    "Model": "Model S",
+    "Model Year": "2017",
+    "Plant City": "FREMONT",
+    "Vehicle Type": "PASSENGER CAR",
+    "Plant Country": "UNITED STATES (USA)",
+    "Plant State": "CALIFORNIA",
+    "Body Class": "Hatchback/Liftback/Notchback",
+    "Doors": "5",
+    "Gross Vehicle Weight Rating From": "Class 1: 6,000 lb or less (2,722 kg or less)",
+    "Gross Vehicle Weight Rating To": "Class 1: 6,000 lb or less (2,722 kg or less)",
+    "Bed Type": "Not Applicable",
+    "Cab Type": "Not Applicable",
+    "Trailer Type Connection": "Not Applicable",
+    "Trailer Body Type": "Not Applicable",
+    "Custom Motorcycle Type": "Not Applicable",
+    "Motorcycle Suspension Type": "Not Applicable",
+    "Motorcycle Chassis Type": "Not Applicable",
+    "Bus Floor Configuration Type": "Not Applicable",
+    "Bus Type": "Not Applicable",
+    "Steering Location": "Left-Hand Drive (LHD)",
+    "Fuel Type - Primary": "Electric",
+    "Electrification Level": "BEV (Battery Electric Vehicle)",
+    "Other Engine Info": "Single Motor - Standard",
+    "Seat Belt Type": "Manual",
+    "Other Restraint System Info": "Type 2 manual seatbelts (FR, SR*3), PODS",
+    "Front Air Bag Locations": "1st Row (Driver and Passenger)",
+    "Knee Air Bag Locations": "1st Row (Driver and Passenger)",
+    "Side Air Bag Locations": "1st Row (Driver and Passenger)"
+  },
+  "documents": [
+    {
+      "document_id": "9252ec21-4a8c-4cc4-b682-62ad070ac6a5",
+      "filename": "test_lease.pdf",
+      "ocr_text": "--- Page 1 ---\n\u2022 Car Lease Agreement\n\u2022 Date: 15 Jan 2026\n\u2022 Lessor: ABC Motors Finance Pvt Ltd, Mumbai, India\n\u2022 Lessee: Rahul Sharma, Bengaluru, India\n\u2022 Vehicle Details\n\u2022 Make: Honda\n\u2022 Model: City VX\n\u2022 Year: 2022\n\u2022 VIN: 1HGCM82633A004352\n\u2022 License Plate: KAO1AB1234\n\u2022 Lease Term\n\u2022 Start Date: 01 Feb 2026\n\u2022 End Date: 31 Jan 2029\n\u2022 Payments\n\u2022 Monthly Payment: 22,000\n\u2022 Down Payment: 1,50,000\n\u2022 Late Fee: 2% per month\n\u2022 Mileage\n\u2022 Allowed: 12,000 km/year\n\u2022 Excess Charge: 8/km\n\u2022 Insurance & Maintenance\n\u2022 Insurance covered by Lessee. Regular maintenance responsibility of Lessee.\n\u2022 Purchase Option\n\u2022 Buyout Price at End: 6,50,000\n\u2022 Governing Law\n\u2022 State of Karnataka, India\n\u2022 Signatures\n\u2022 Lessor: ABC Motors Finance Pvt Ltd\n\u2022 Lessee: Rahul Sharma"
+    }
+  ]
+}
