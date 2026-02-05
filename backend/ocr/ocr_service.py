@@ -1,7 +1,7 @@
 import pytesseract
 from pdf2image import convert_from_path
 
-# Explicit path to Tesseract (Windows)
+# Explicit path to Tesseract
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 def extract_text_from_pdf(pdf_path: str) -> str:
