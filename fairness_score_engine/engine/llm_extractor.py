@@ -34,6 +34,7 @@ EXTRACTION_SCHEMA = {
     "overage_fee_per_mile": "Excess mileage fee per mile in dollars (e.g., 0.25)",
     "early_termination_policy": "Early termination fee or policy description",
     "residual_value_percent": "Residual value as a percentage of MSRP (e.g., 55 for 55%)",
+    "residual_value_amount": "Residual value amount in dollars if stated as a dollar value (e.g., 18000)",
     "late_fee_policy": "Late payment fee or policy description",
     "maintenance_responsibility": "Who is responsible for maintenance: 'lessee', 'lessor', or 'shared'",
     "buyout_price": "Purchase option or buyout price in dollars",
@@ -150,7 +151,7 @@ Return a JSON object with the extracted values. Use null for fields not found.""
         # Numeric fields that should be Decimal
         decimal_fields = [
             'apr', 'monthly_payment', 'down_payment', 
-            'overage_fee_per_mile', 'residual_value_percent', 'buyout_price'
+            'overage_fee_per_mile', 'residual_value_percent', 'residual_value_amount', 'buyout_price'
         ]
         
         # Integer fields

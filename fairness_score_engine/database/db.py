@@ -22,14 +22,23 @@ class ContractFactsDB:
                     overage_fee_per_mile REAL,
                     early_termination_policy TEXT,
                     residual_value_percent REAL,
+                    residual_value_amount REAL,
                     late_fee_policy TEXT,
                     maintenance_responsibility TEXT,
+                    maintenance_clause TEXT,
                     buyout_price REAL,
                     warranty_coverage TEXT,
                     insurance_coverage TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
+            # Lightweight migration for older databases
+            cursor.execute("PRAGMA table_info(contract_facts)")
+            columns = {row[1] for row in cursor.fetchall()}
+            if "residual_value_amount" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN residual_value_amount REAL")
+            if "maintenance_clause" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN maintenance_clause TEXT")
             conn.commit()
 
     def insert_contract_facts(self, facts: ContractFacts) -> int:
@@ -39,9 +48,10 @@ class ContractFactsDB:
                 INSERT INTO contract_facts (
                     apr, monthly_payment, lease_term_months, down_payment,
                     mileage_limit_per_year, overage_fee_per_mile, early_termination_policy,
-                    residual_value_percent, late_fee_policy, maintenance_responsibility,
+                    residual_value_percent, residual_value_amount, late_fee_policy, maintenance_responsibility,
+                    maintenance_clause,
                     buyout_price, warranty_coverage, insurance_coverage
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 float(facts.apr) if facts.apr else None,
                 float(facts.monthly_payment) if facts.monthly_payment else None,
@@ -51,8 +61,10 @@ class ContractFactsDB:
                 float(facts.overage_fee_per_mile) if facts.overage_fee_per_mile else None,
                 facts.early_termination_policy,
                 float(facts.residual_value_percent) if facts.residual_value_percent else None,
+                float(facts.residual_value_amount) if facts.residual_value_amount else None,
                 facts.late_fee_policy,
                 facts.maintenance_responsibility.value if facts.maintenance_responsibility else None,
+                facts.maintenance_clause,
                 float(facts.buyout_price) if facts.buyout_price else None,
                 facts.warranty_coverage,
                 facts.insurance_coverage

@@ -1,0 +1,70 @@
+{
+  "rules": {
+    "apr": {
+      "field": "apr",
+      "method": "z_score",
+      "weight": 0.2,
+      "direction": "lower_better",
+      "penalty_factor": 15
+    },
+    "monthly_payment": {
+      "field": "monthly_payment",
+      "method": "z_score",
+      "weight": 0.15,
+      "direction": "lower_better",
+      "penalty_factor": 12
+    },
+    "lease_term_months": {
+      "field": "lease_term_months",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "lower_better",
+      "penalty_factor": 10
+    },
+    "down_payment": {
+      "field": "down_payment",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "lower_better",
+      "penalty_factor": 10
+    },
+    "mileage_limit_per_year": {
+      "field": "mileage_limit_per_year",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "higher_better",
+      "penalty_factor": 8
+    },
+    "overage_fee_per_mile": {
+      "field": "overage_fee_per_mile",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "lower_better",
+      "penalty_factor": 10
+    },
+    "residual_value_percent": {
+      "field": "residual_value_percent",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "higher_better",
+      "penalty_factor": 10
+    },
+    "buyout_price": {
+      "field": "buyout_price",
+      "method": "z_score",
+      "weight": 0.1,
+      "direction": "lower_better",
+      "penalty_factor": 8
+    },
+    "maintenance_responsibility": {
+      "field": "maintenance_responsibility",
+      "method": "categorical_map",
+      "weight": 0.05,
+      "categories": {
+        "lessor": 90,
+        "shared": 70,
+        "lessee": 50
+      }
+    }
+  }
+}

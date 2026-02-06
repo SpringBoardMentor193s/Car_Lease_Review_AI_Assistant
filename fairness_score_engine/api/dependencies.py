@@ -11,10 +11,7 @@ load_dotenv(Path(__file__).parent.parent / '.env')
 
 from database.db import ContractFactsDB
 from pipelines.extract_pipeline import ExtractPipeline
-
-# Configuration from environment variables
-TESSERACT_CMD = os.getenv('TESSERACT_CMD', r'C:\Program Files\Tesseract-OCR\tesseract.exe')
-GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+from pipelines.scoring_pipeline import ScoringPipeline
 
 def get_db() -> ContractFactsDB:
     """Dependency to get database instance"""
@@ -22,7 +19,15 @@ def get_db() -> ContractFactsDB:
 
 def get_extract_pipeline() -> ExtractPipeline:
     """Dependency to get extraction pipeline instance with LLM and OCR support"""
+    # Read env at call time to avoid stale values
+    tesseract_cmd = os.getenv('TESSERACT_CMD', r'C:\Program Files\Tesseract-OCR\tesseract.exe')
+    groq_api_key = os.getenv('GROQ_API_KEY')
     return ExtractPipeline(
-        tesseract_cmd=TESSERACT_CMD,
-        openai_api_key=GROQ_API_KEY  # Using Groq's free API
+        tesseract_cmd=tesseract_cmd,
+        openai_api_key=groq_api_key  # Using Groq's free API
     )
+
+
+def get_scoring_pipeline() -> ScoringPipeline:
+    """Dependency to get scoring pipeline instance."""
+    return ScoringPipeline()

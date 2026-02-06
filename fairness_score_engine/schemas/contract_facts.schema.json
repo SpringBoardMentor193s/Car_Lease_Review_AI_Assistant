@@ -45,12 +45,21 @@
       "maximum": "100",
       "type": "number"
     },
+    "residual_value_amount": {
+      "title": "Residual Value Amount",
+      "minimum": "0",
+      "type": "number"
+    },
     "late_fee_policy": {
       "title": "Late Fee Policy",
       "type": "string"
     },
     "maintenance_responsibility": {
       "$ref": "#/definitions/MaintenanceResponsibility"
+    },
+    "maintenance_clause": {
+      "title": "Maintenance Clause",
+      "type": "string"
     },
     "buyout_price": {
       "title": "Buyout Price",

@@ -1,0 +1,10 @@
+{
+  "apr": { "mean": 6.5, "std": 2.5, "min": 0.0, "max": 20.0 },
+  "monthly_payment": { "mean": 450.0, "std": 150.0, "min": 150.0, "max": 1200.0 },
+  "lease_term_months": { "mean": 36.0, "std": 12.0, "min": 12.0, "max": 84.0 },
+  "down_payment": { "mean": 2000.0, "std": 1500.0, "min": 0.0, "max": 10000.0 },
+  "mileage_limit_per_year": { "mean": 12000.0, "std": 2000.0, "min": 8000.0, "max": 20000.0 },
+  "overage_fee_per_mile": { "mean": 0.25, "std": 0.1, "min": 0.05, "max": 0.5 },
+  "residual_value_percent": { "mean": 55.0, "std": 10.0, "min": 35.0, "max": 75.0 },
+  "buyout_price": { "mean": 15000.0, "std": 5000.0, "min": 5000.0, "max": 30000.0 }
+}

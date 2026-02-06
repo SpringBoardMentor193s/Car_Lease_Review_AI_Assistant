@@ -14,11 +14,19 @@ from .schemas import (
     ExtractionError,
     ContractFactsResponse,
     VinReportResponse,
+    ScoreResult,
+    FairnessReportResponse,
+    OcrHealthResponse,
 )
-from .dependencies import get_extract_pipeline, get_db
+from .dependencies import get_extract_pipeline, get_db, get_scoring_pipeline
 from database.db import ContractFactsDB
 from pipelines.extract_pipeline import ExtractPipeline
+from pipelines.scoring_pipeline import ScoringPipeline
 from engine.vin_report import generate_vin_report
+from models.contract_facts import ContractFacts
+import os
+import shutil
+from engine.pdf_extractor import OCR_AVAILABLE
 
 router = APIRouter()
 
@@ -86,14 +94,94 @@ async def extract_contract_facts(
 
         return ExtractionResult(
             record_id=record_id,
-            extracted_data=extracted_data
+            extracted_data=extracted_data,
         )
 
+    except RuntimeError as e:
+        if temp_path.exists():
+            temp_path.unlink()
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         # Clean up on error
         if temp_path.exists():
             temp_path.unlink()
         raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}")
+
+
+@router.post("/score", response_model=ScoreResult)
+async def score_contract(
+    file: UploadFile = File(...),
+    use_llm: bool = True,
+    use_ocr: bool = False,
+    pipeline: ExtractPipeline = Depends(get_extract_pipeline),
+    scoring_pipeline: ScoringPipeline = Depends(get_scoring_pipeline),
+):
+    """
+    Upload a PDF, extract contract facts, and return a fairness score.
+
+    - **file**: PDF file containing the car lease agreement
+    - **use_llm**: Use LLM (Llama 3) for extraction (recommended for real contracts, default: True)
+    - **use_ocr**: Force OCR for scanned PDFs (default: False)
+    - Returns extraction results and fairness score report
+    """
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
+    temp_path = UPLOAD_DIR / f"temp_{file.filename}"
+    final_path = None
+
+    if SAVE_ORIGINAL_PDFS:
+        import time
+        timestamp = int(time.time())
+        final_path = UPLOAD_DIR / f"{timestamp}_{file.filename}"
+
+    try:
+        with temp_path.open("wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        if final_path:
+            shutil.move(str(temp_path), str(final_path))
+            processing_path = final_path
+        else:
+            processing_path = temp_path
+
+        record_id = pipeline.run(str(processing_path), use_ocr=use_ocr, use_llm=use_llm)
+        if record_id is None:
+            raise HTTPException(status_code=422, detail="Failed to extract contract facts from PDF")
+
+        db = ContractFactsDB()
+        records = db.get_all_contract_facts()
+        extracted_data = next((r for r in records if r['id'] == record_id), {})
+
+        if not extracted_data:
+            raise HTTPException(status_code=500, detail="Extracted record not found after insert")
+
+        # Build ContractFacts from extracted data (strip DB fields)
+        fact_fields = set(ContractFacts.__fields__.keys())
+        facts_payload = {k: v for k, v in extracted_data.items() if k in fact_fields}
+        fairness_report = scoring_pipeline.run(facts_payload)
+
+        if not SAVE_ORIGINAL_PDFS and temp_path.exists():
+            temp_path.unlink()
+
+        return ScoreResult(
+            record_id=record_id,
+            extracted_data=extracted_data,
+            fairness_report=FairnessReportResponse(**fairness_report.dict()),
+        )
+
+    except HTTPException:
+        if temp_path.exists():
+            temp_path.unlink()
+        raise
+    except RuntimeError as e:
+        if temp_path.exists():
+            temp_path.unlink()
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        if temp_path.exists():
+            temp_path.unlink()
+        raise HTTPException(status_code=500, detail=f"Scoring failed: {str(e)}")
 
 @router.get("/contracts", response_model=List[ContractFactsResponse])
 async def get_all_contracts(db: ContractFactsDB = Depends(get_db)):
@@ -134,3 +222,25 @@ async def get_vin_report(vin: str):
         return report
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"VIN report generation failed: {str(e)}")
+
+
+@router.get("/health/ocr", response_model=OcrHealthResponse)
+async def ocr_health():
+    """Check OCR dependencies and configuration."""
+    tesseract_cmd = os.getenv("TESSERACT_CMD", "")
+    tesseract_exists = bool(tesseract_cmd) and os.path.exists(tesseract_cmd)
+    pdf2image_available = OCR_AVAILABLE
+    poppler_on_path = bool(shutil.which("pdfinfo")) and bool(shutil.which("pdftoppm"))
+    poppler_hint = (
+        "Install Poppler and add its bin folder to PATH (e.g., C:\\Program Files\\poppler\\Library\\bin)"
+        if not poppler_on_path
+        else ""
+    )
+
+    return OcrHealthResponse(
+        tesseract_cmd=tesseract_cmd or "",
+        tesseract_exists=tesseract_exists,
+        pdf2image_available=pdf2image_available,
+        poppler_on_path=poppler_on_path,
+        poppler_hint=poppler_hint,
+    )

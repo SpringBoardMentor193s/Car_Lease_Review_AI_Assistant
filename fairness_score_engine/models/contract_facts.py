@@ -34,13 +34,23 @@ class ContractFacts(BaseModel):
     overage_fee_per_mile: Optional[Decimal] = Field(None, ge=Decimal("0"))
     early_termination_policy: Optional[str] = None
     residual_value_percent: Optional[Decimal] = Field(None, ge=Decimal("0"), le=Decimal("100"))
+    residual_value_amount: Optional[Decimal] = Field(None, ge=Decimal("0"))
     late_fee_policy: Optional[str] = None
     maintenance_responsibility: Optional[MaintenanceResponsibility] = None
+    maintenance_clause: Optional[str] = None
     buyout_price: Optional[Decimal] = Field(None, ge=Decimal("0"))
     warranty_coverage: Optional[str] = None
     insurance_coverage: Optional[str] = None
 
-    @validator("apr", "monthly_payment", "down_payment", "overage_fee_per_mile", "residual_value_percent", pre=True)
+    @validator(
+        "apr",
+        "monthly_payment",
+        "down_payment",
+        "overage_fee_per_mile",
+        "residual_value_percent",
+        "residual_value_amount",
+        pre=True,
+    )
     def parse_decimals(cls, v):
         if v is None:
             return v
@@ -56,7 +66,7 @@ class ContractFacts(BaseModel):
             raise ValueError(f"APR of {v}% exceeds reasonable threshold of 25%")
         return v.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
 
-    @validator("monthly_payment", "down_payment", "overage_fee_per_mile")
+    @validator("monthly_payment", "down_payment", "overage_fee_per_mile", "residual_value_amount")
     def round_money(cls, v: Optional[Decimal]) -> Optional[Decimal]:
         if v is not None:
             return v.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
