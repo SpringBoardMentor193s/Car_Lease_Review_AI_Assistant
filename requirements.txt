@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+pytesseract
+pdf2image
+pillow
+openai
+requests
+sqlalchemy
+psycopg2-binary
+ 
