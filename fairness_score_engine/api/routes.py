@@ -37,6 +37,36 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 # Configuration for PDF storage
 SAVE_ORIGINAL_PDFS = True  # Set to False to delete PDFs after processing
 
+def _with_mileage_km(extracted_data: dict, remove_miles: bool = False) -> dict:
+    data = dict(extracted_data)
+    miles = data.get("mileage_limit_per_year")
+    if miles is None:
+        return data
+    try:
+        km = int(round(float(miles) / 0.621371))
+    except Exception:
+        return data
+    data["mileage_limit_per_year_km"] = km
+    data["mileage_limit_per_year_display"] = f"{km} km"
+    if remove_miles:
+        data.pop("mileage_limit_per_year", None)
+    return data
+
+def _with_overage_km(extracted_data: dict, remove_miles: bool = False) -> dict:
+    data = dict(extracted_data)
+    miles_fee = data.get("overage_fee_per_mile")
+    if miles_fee is None:
+        return data
+    try:
+        km_fee = float(miles_fee) * 0.621371
+    except Exception:
+        return data
+    data["overage_fee_per_km"] = round(km_fee, 4)
+    data["overage_fee_per_km_display"] = f"{round(km_fee, 4)} per km"
+    if remove_miles:
+        data.pop("overage_fee_per_mile", None)
+    return data
+
 @router.post("/extract", response_model=ExtractionResult)
 async def extract_contract_facts(
     file: UploadFile = File(...),
@@ -87,6 +117,8 @@ async def extract_contract_facts(
         db = ContractFactsDB()
         records = db.get_all_contract_facts()
         extracted_data = next((r for r in records if r['id'] == record_id), {})
+        response_data = _with_mileage_km(extracted_data, remove_miles=True)
+        response_data = _with_overage_km(response_data, remove_miles=True)
 
         # Clean up temp file if not saving permanently
         if not SAVE_ORIGINAL_PDFS and temp_path.exists():
@@ -94,7 +126,7 @@ async def extract_contract_facts(
 
         return ExtractionResult(
             record_id=record_id,
-            extracted_data=extracted_data,
+            extracted_data=response_data,
         )
 
     except RuntimeError as e:
@@ -152,6 +184,8 @@ async def score_contract(
         db = ContractFactsDB()
         records = db.get_all_contract_facts()
         extracted_data = next((r for r in records if r['id'] == record_id), {})
+        response_data = _with_mileage_km(extracted_data, remove_miles=True)
+        response_data = _with_overage_km(response_data, remove_miles=True)
 
         if not extracted_data:
             raise HTTPException(status_code=500, detail="Extracted record not found after insert")
@@ -166,7 +200,7 @@ async def score_contract(
 
         return ScoreResult(
             record_id=record_id,
-            extracted_data=extracted_data,
+            extracted_data=response_data,
             fairness_report=FairnessReportResponse(**fairness_report.dict()),
         )
 
