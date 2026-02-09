@@ -117,7 +117,8 @@ async def extract_contract_facts(
         db = ContractFactsDB()
         records = db.get_all_contract_facts()
         extracted_data = next((r for r in records if r['id'] == record_id), {})
-        # keep extracted_data internal; /score response only returns fairness_report
+        response_data = _with_mileage_km(extracted_data, remove_miles=True)
+        response_data = _with_overage_km(response_data, remove_miles=True)
 
         # Clean up temp file if not saving permanently
         if not SAVE_ORIGINAL_PDFS and temp_path.exists():
