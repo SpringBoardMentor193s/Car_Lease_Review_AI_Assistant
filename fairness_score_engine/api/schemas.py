@@ -86,7 +86,6 @@ class ScoreResult(BaseModel):
     """Response schema for extraction + scoring."""
 
     record_id: int
-    extracted_data: Dict[str, Any]
     fairness_report: FairnessReportResponse
     status: str = "success"
     message: str = "PDF scored successfully"
