@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import re
 from dotenv import load_dotenv
 from backend.schemas.sla_schema import SLA_FIELDS
 
@@ -11,23 +12,56 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 def extract_sla_with_llm(text: str) -> dict:
     """
-    Real LLM-based SLA extractor using Groq API
+    Enhanced LLM-based SLA extractor for real-world lease contracts.
+    More robust against complex formatting and multiple payment values.
     """
 
-    # Always start with full schema
+    # Start with full schema (safe default)
     sla_data = SLA_FIELDS.copy()
 
     if not GROQ_API_KEY:
-        # Fallback safety
         return sla_data
 
-    # 🔥 PROMPT ENGINEERING (MENTOR GOLD PART)
+    # Limit contract size to avoid token overflow
+    contract_text = text[:7000]
+
     prompt = f"""
-You are a financial contract analyst.
+You are an expert vehicle lease financial analyst.
 
-Extract the following SLA fields from this vehicle lease contract text.
+Your task is to extract FINAL payable financial values from this lease contract.
 
-Return ONLY valid JSON with these keys:
+Extraction Guidelines:
+
+1. monthly_payment:
+   - Extract the FINAL recurring monthly amount customer must pay.
+   - Prefer values labeled "Total Monthly Payment" or "Monthly Payment Including Tax".
+   - Do NOT extract base payment before taxes if total is available.
+
+2. late_fees:
+   - Extract the actual monetary late charge amount.
+   - If percentage-based, return numeric percentage (e.g., 5%).
+   - Ignore general policy text.
+
+3. lease_term_months:
+   - Extract total lease duration in months.
+
+4. interest_rate:
+   - Extract APR if available.
+   - If only Money Factor exists, return it as-is.
+
+5. down_payment:
+   - Extract total upfront amount due at signing.
+
+6. residual_value:
+   - Extract end-of-term residual value.
+
+7. buyout_price:
+   - Extract purchase option price at lease end.
+
+8. mileage_limit:
+   - Extract total allowed miles (annual or total term).
+
+Return ONLY valid JSON with exactly these keys:
 interest_rate
 lease_term_months
 monthly_payment
@@ -39,12 +73,14 @@ late_fees
 buyout_price
 
 Rules:
-- If value not found, use null
-- Do NOT add extra keys
+- Remove currency symbols
+- Return numeric values when possible
+- If value not found, return null
 - Do NOT explain anything
+- Do NOT add extra keys
 
-Contract text:
-{text[:4000]}
+Contract:
+{contract_text}
 """
 
     url = "https://api.groq.com/openai/v1/chat/completions"
@@ -57,30 +93,35 @@ Contract text:
     payload = {
         "model": "mixtral-8x7b-32768",
         "messages": [
-            {"role": "system", "content": "You extract structured data from contracts."},
+            {"role": "system", "content": "You extract structured financial data from vehicle lease contracts."},
             {"role": "user", "content": prompt}
         ],
         "temperature": 0
     }
 
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=20)
+        response = requests.post(url, headers=headers, json=payload, timeout=25)
 
         if response.status_code != 200:
             return sla_data
 
         content = response.json()["choices"][0]["message"]["content"]
 
-        # Parse JSON safely
-        extracted = json.loads(content)
+        # 🔥 SAFE JSON EXTRACTION (handles extra text)
+        json_match = re.search(r"\{.*\}", content, re.DOTALL)
 
-        # Merge into schema (only allowed fields)
+        if not json_match:
+            return sla_data
+
+        extracted = json.loads(json_match.group())
+
+        # Merge safely into schema
         for key in sla_data:
             if key in extracted:
                 sla_data[key] = extracted[key]
 
         return sla_data
 
-    except Exception as e:
-        # In case LLM fails, return empty schema (safe fallback)
+    except Exception:
+        # Fail safely
         return sla_data
