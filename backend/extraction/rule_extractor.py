@@ -1,3 +1,4 @@
+from email.mime import text
 import re
 
 
@@ -90,49 +91,113 @@ def extract_sla_fields(text: str):
     data["residual_value"] = find_first(text, residual_patterns)
 
     # ===============================
-    # BUYOUT PRICE
-    # ===============================
-    buyout_patterns = [
-        # OLD
-        r"Buyout Price.*?:\s*\$?([\d,]+\.?\d*)",
-
-        # NEW
-        r"(?:purchase option price)[^\$]{0,40}\$?\s*([\d,]+\.\d{2})",
-        r"(?:buyout price)[^\$]{0,40}\$?\s*([\d,]+\.\d{2})"
-    ]
-    data["buyout_price"] = find_first(text, buyout_patterns)
-
-    # ===============================
-    # MILEAGE LIMIT
+    # BUYOUT PRICE / PURCHASE OPTION
     # ===============================
 
-    mileage_patterns = [
-        # Old strict format
-        r"Mileage Limit:\s*([\d,]+\s*(?:miles|kilometers).*?/year)",
+    buyout_value = None
 
-        # 12000 miles per year
-        r"([\d,]+\s*(?:miles|kilometers)\s*(?:per|/)\s*year)",
+    money_pattern = r"\$?\s*([\d,]+(?:\.\d{2})?)"
 
-        # in excess of 54,000 kilometers
-        r"in excess of\s*(?:kilometers|miles)?\s*([\d,]+)",
-        
-        # kilometers 54,000
-        r"kilometers\s*([\d,]+)",
+    # 1️⃣ Strict format with colon
+    m = re.search(
+        rf"(Buyout Price|Purchase Option Price)[^\n:]*:\s*{money_pattern}",
+        text,
+        re.IGNORECASE
+    )
+    if m:
+        buyout_value = m.group(2 if m.lastindex > 1 else 1).replace(",", "")
 
-        # 54,000 km
-        r"([\d,]+\s*(?:km|kilometers|miles))"
-    ]
+    # 2️⃣ Buyout Price at End of Lease $XXXX
+    if buyout_value is None:
+        m = re.search(
+            rf"Buyout Price[^$\n]*{money_pattern}",
+            text,
+            re.IGNORECASE
+        )
+        if m:
+            buyout_value = m.group(1).replace(",", "")
+
+    # 3️⃣ Real world clause
+    if buyout_value is None:
+        m = re.search(
+            rf"purchase price at lease maturity.*?{money_pattern}",
+            text,
+            re.IGNORECASE | re.DOTALL
+        )
+        if m:
+            buyout_value = m.group(1).replace(",", "")
+
+    # 4️⃣ $XXXX ... Purchase Option Price
+    if buyout_value is None:
+        m = re.search(
+            rf"{money_pattern}.*?Purchase Option Price",
+            text,
+            re.IGNORECASE | re.DOTALL
+        )
+        if m:
+            buyout_value = m.group(1).replace(",", "")
+
+    data["buyout_price"] = buyout_value
+
+
+
+
+    # ===============================
+    # MILEAGE LIMIT (With Units)
+    # ===============================
 
     mileage_value = None
 
-    for pattern in mileage_patterns:
-        match = re.search(pattern, text, re.IGNORECASE)
-        if match:
-            if match.lastindex:
-                mileage_value = match.group(1).strip()
-                break
+    # 1️⃣ Strict pattern (Mileage Limit: 12000 miles/year)
+    limit_match = re.search(
+        r"(?:Mileage Limit|Annual Mileage)[^\n:]*:\s*([\d,]+)\s*(miles\/year|km\/year|kilometers\/year)?",
+        text,
+        re.IGNORECASE
+    )
+
+    if limit_match:
+        number = limit_match.group(1).replace(",", "")
+        unit = limit_match.group(2)
+
+        if unit:
+            mileage_value = f"{number} {unit}"
+        else:
+            mileage_value = number
+
+
+    # 2️⃣ Real-world pattern (in excess of 54,000 kilometers)
+    if mileage_value is None:
+        excess_match = re.search(
+            r"in excess of\s*(?:kilometers|km|miles)?\s*([\d,]+)",
+            text,
+            re.IGNORECASE
+        )
+
+        if excess_match:
+            number = excess_match.group(1).replace(",", "")
+            mileage_value = f"{number} km"
+
+
+    # 3️⃣ Generic fallback (avoid odometer)
+    if mileage_value is None:
+        for match in re.finditer(
+            r"([\d,]+)\s*(km|kilometers|miles)",
+            text,
+            re.IGNORECASE
+        ):
+            context = text[max(0, match.start()-50):match.start()].lower()
+
+            if "odometer" in context or "reading" in context:
+                continue
+
+            number = match.group(1).replace(",", "")
+            unit = match.group(2)
+            mileage_value = f"{number} {unit}"
+            break
 
     data["mileage_limit"] = mileage_value
+
+
 
     # ===============================
     # EARLY TERMINATION
