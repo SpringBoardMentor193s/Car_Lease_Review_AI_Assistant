@@ -8,4 +8,7 @@ Pillow
 python-dotenv
 openai
 requests
+pytest
+pytest-asyncio
+httpx
 

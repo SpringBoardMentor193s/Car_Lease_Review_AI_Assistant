@@ -9,6 +9,8 @@ from .llm_service import extract_sla
 from typing import cast, Any
 from .vin_service import lookup_vin
 from .negotiation_service import generate_negotiation_advice
+from .pricing_service import get_comprehensive_pricing
+from .fairness_score import calculate_fairness_score
 
 Base.metadata.create_all(bind=engine)
 
@@ -105,3 +107,94 @@ def negotiation(contract_id: int):
 
     advice = generate_negotiation_advice(contract.sla_json or "{}")
     return {"negotiation_advice": advice}
+
+
+# -------- Milestone 4: Pricing APIs & Fairness Score --------
+
+
+@app.get("/pricing/{vin}")
+def get_pricing(vin: str):
+    """
+    Fetch fair market pricing for a vehicle using multiple APIs.
+    
+    Integrates:
+    - NHTSA API for vehicle specs
+    - Edmunds pricing data
+    - TrueCar market data
+    """
+    pricing_data = get_comprehensive_pricing(vin)
+    return pricing_data
+
+
+@app.post("/fairness-score/{contract_id}")
+def compute_fairness_score(contract_id: int, vin: str = None):
+    """
+    Calculate Contract Fairness Score (0-100) with detailed breakdown.
+    
+    Evaluates:
+    - Monthly payment competitiveness
+    - Interest rate fairness
+    - Mileage allowance
+    - Early termination fees
+    - Penalty structure
+    - Market price comparison (if VIN provided)
+    
+    Scoring: 0-100 where 80+ is EXCELLENT, 65-79 is GOOD, etc.
+    """
+    db = SessionLocal()
+    contract = db.query(Contract).filter(Contract.id == contract_id).first()
+    if contract is None:
+        db.close()
+        raise HTTPException(status_code=404, detail="Contract not found")
+
+    sla_json = contract.sla_json or "{}"
+    fairness_result = calculate_fairness_score(sla_json, vin)
+    
+    # Update contract with fairness score
+    cast(Any, contract).fairness_score = fairness_result["fairness_score"]
+    cast(Any, contract).fairness_level = fairness_result["fairness_level"]
+    db.commit()
+    db.close()
+
+    return {
+        "contract_id": contract_id,
+        "fairness_score": fairness_result["fairness_score"],
+        "fairness_level": fairness_result["fairness_level"],
+        "breakdown": fairness_result["breakdown"],
+        "recommendations": fairness_result["recommendations"]
+    }
+
+
+@app.get("/full-report/{contract_id}")
+def get_full_report(contract_id: int, vin: str = None):
+    """
+    Get comprehensive contract review report including:
+    - SLA extraction
+    - Negotiation advice
+    - Pricing data
+    - Fairness score
+    """
+    db = SessionLocal()
+    contract = db.query(Contract).filter(Contract.id == contract_id).first()
+    if contract is None:
+        db.close()
+        raise HTTPException(status_code=404, detail="Contract not found")
+    db.close()
+
+    sla = json.loads(str(contract.sla_json)) if contract.sla_json else {}
+    advice = generate_negotiation_advice(contract.sla_json or "{}")
+    fairness = calculate_fairness_score(contract.sla_json or "{}", vin)
+    pricing = get_comprehensive_pricing(vin) if vin else {}
+    
+    return {
+        "contract_id": contract_id,
+        "filename": contract.filename,
+        "sla_extraction": sla,
+        "negotiation_advice": advice,
+        "pricing_data": pricing,
+        "fairness_score": fairness["fairness_score"],
+        "fairness_level": fairness["fairness_level"],
+        "fairness_breakdown": fairness["breakdown"],
+        "recommendations": fairness["recommendations"]
+    }
+

@@ -1,0 +1,22 @@
+
+        CAR LEASE AGREEMENT
+        
+        LESSOR: AutoCorp Finance Inc.
+        LESSEE: John Doe
+        
+        LEASE TERM: 36 months
+        EFFECTIVE DATE: 2024-01-01
+        
+        MONTHLY PAYMENT: $350
+        TOTAL COST: $12,600
+        
+        MILEAGE ALLOWANCE: 12,000 miles per year
+        EXCESS MILEAGE: $0.25 per mile
+        
+        INTEREST RATE: 5.5%
+        
+        EARLY TERMINATION FEE: $1,500
+        LATE PAYMENT PENALTY: $25
+        
+        This agreement is binding and enforceable.
+        
