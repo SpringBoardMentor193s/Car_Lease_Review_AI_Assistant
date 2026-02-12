@@ -28,7 +28,13 @@ class ScoringPipeline:
         self.scorer = FairnessScorer(self.rules, self.benchmarks)
 
     def run(self, facts: Union[ContractFacts, Dict[str, Any]]) -> FairnessReport:
-        contract_facts = facts if isinstance(facts, ContractFacts) else ContractFacts(**facts)
+        if isinstance(facts, ContractFacts):
+            contract_facts = facts
+        else:
+            # Drop non-model keys (e.g., DB metadata like id/created_at).
+            fact_fields = set(ContractFacts.__fields__.keys())
+            sanitized_facts = {k: v for k, v in facts.items() if k in fact_fields}
+            contract_facts = ContractFacts(**sanitized_facts)
         return self.scorer.score(contract_facts)
 
     def _load_rules(self) -> ScoringRules:
