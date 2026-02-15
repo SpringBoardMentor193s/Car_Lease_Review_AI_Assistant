@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contract Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleDarkMode()">
+    🌙 Toggle Dark Mode
+</button>
+
+<div class="container">
+
+    <h1><i class="fa-solid fa-car"></i> Contract Analysis</h1>
+
+    <!-- Risk Card -->
+    <div class="card risk {{ data.risk | lower }}">
+        <h2><i class="fa-solid fa-triangle-exclamation"></i> Risk Level</h2>
+        <p class="risk-text">{{ data.risk }}</p>
+
+        <div class="risk-bar">
+            <div class="risk-fill {{ data.risk | lower }}"></div>
+        </div>
+    </div>
+
+    <!-- Key Details -->
+    <div class="card">
+        <h2><i class="fa-solid fa-file-contract"></i> Key Details</h2>
+        <p><strong>Interest Rate:</strong> {{ data.interest_rate }}</p>
+        <p><strong>Tenure:</strong> {{ data.tenure }}</p>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="card">
+        <h2><i class="fa-solid fa-lightbulb"></i> Negotiation Suggestions</h2>
+        <ul>
+            {% for s in data.suggestions %}
+            <li>{{ s }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Savings Potential -->
+    <div class="card savings">
+        <h2><i class="fa-solid fa-money-bill-wave"></i> Possible Savings</h2>
+        <p>You may save <strong>$1,200 – $2,000</strong> by negotiating terms.</p>
+    </div>
+
+    <a class="btn" href="/upload">
+        <i class="fa-solid fa-upload"></i> Upload Another Contract
+    </a>
+
+</div>
+
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
+
+<div class="card">
+    <h2><i class="fa-solid fa-coins"></i> Price Insight</h2>
+
+    <p><strong>Market Price:</strong> ${{ data.market_price }}</p>
+    <p><strong>Contract Price:</strong> ${{ data.contract_price }}</p>
+    <p><strong>Deal Rating:</strong> {{ data.fairness }}</p>
+</div>
+
