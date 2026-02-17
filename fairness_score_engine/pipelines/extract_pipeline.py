@@ -11,6 +11,7 @@ import logging
 import re
 from models.contract_facts import ContractFacts
 from engine.pdf_extractor import PDFExtractor
+from engine.vin_report import decode_vin
 from database.db import ContractFactsDB
 
 # Optional LLM extractor for complex documents
@@ -64,6 +65,7 @@ class ExtractPipeline:
             
             # First extract text from PDF
             text = self.extractor.extract_text_from_pdf(pdf_path, use_ocr=use_ocr)
+            text_layer = self.extractor._extract_with_pdfplumber(pdf_path)
             
             if use_ocr and not text:
                 raise RuntimeError(
@@ -80,6 +82,11 @@ class ExtractPipeline:
                 extracted_data = self.extractor.extract_fields(text)
 
             extracted_data = self._override_from_text(text, extracted_data)
+            extracted_data = self._extract_pricing_context(text, extracted_data)
+            # If OCR was forced but PDF text layer exists, prefer text-layer identity signals
+            # (VIN/year/make/model are often cleaner in embedded text than OCR output).
+            if use_ocr and self.extractor._has_meaningful_text(text_layer):
+                extracted_data = self._extract_pricing_context(text_layer, extracted_data)
             extracted_data = self._normalize_clause_misclassification(extracted_data)
             extracted_data = self._normalize_mileage_total_to_annual(extracted_data)
             extracted_data = self._drop_residual_if_equals_buyout(extracted_data)
@@ -344,6 +351,373 @@ class ExtractPipeline:
             except Exception:
                 pass
         return data
+
+    def _extract_pricing_context(self, text: str, data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Extract optional pricing-context fields that improve dynamic buyout estimation.
+        """
+        normalized = re.sub(r"\s+", " ", text).strip()
+        normalized_lower = normalized.lower()
+
+        self._normalize_or_replace_vin(normalized, data)
+
+        address_parts = self._extract_address_components(normalized)
+        if address_parts:
+            if not data.get("lessee_city") and address_parts.get("city"):
+                data["lessee_city"] = address_parts["city"]
+            if not data.get("lessee_state") and address_parts.get("state_or_province"):
+                data["lessee_state"] = address_parts["state_or_province"]
+            if not data.get("lessee_zip") and address_parts.get("postal_code"):
+                data["lessee_zip"] = address_parts["postal_code"]
+
+        if not data.get("lessee_state"):
+            state = self._extract_us_state(normalized)
+            if state:
+                data["lessee_state"] = state
+
+        if not data.get("lessee_zip"):
+            zip_code = self._extract_zip(normalized)
+            if zip_code:
+                data["lessee_zip"] = zip_code
+
+        if not data.get("lessee_city"):
+            city = self._extract_city(normalized)
+            if city:
+                data["lessee_city"] = city
+
+        if data.get("vin"):
+            self._backfill_vehicle_identity_from_vin(data)
+        self._backfill_vehicle_identity_from_table(normalized, data)
+
+        if not data.get("vehicle_mileage"):
+            mileage = self._extract_vehicle_mileage(normalized_lower)
+            if mileage is not None:
+                data["vehicle_mileage"] = mileage
+
+        if not data.get("lease_region"):
+            region = self._extract_lease_region(normalized_lower)
+            if region:
+                data["lease_region"] = region
+
+        if not data.get("vehicle_condition"):
+            condition = self._extract_vehicle_condition(normalized_lower)
+            if condition:
+                data["vehicle_condition"] = condition
+
+        return data
+
+    def _normalize_or_replace_vin(self, normalized_text: str, data: Dict[str, Any]) -> None:
+        """
+        Keep VIN only if it is probable, otherwise attempt fresh extraction from text.
+        """
+        vin = data.get("vin")
+        if vin:
+            vin_up = str(vin).strip().upper()
+            vin_up = self._normalize_ocr_vin_candidate(vin_up)
+            if self._is_probable_vin(vin_up):
+                data["vin"] = vin_up
+                return
+            data["vin"] = None
+
+        extracted = self._extract_vin(normalized_text)
+        if extracted:
+            data["vin"] = extracted
+
+    def _extract_us_state(self, text: str) -> Optional[str]:
+        patterns = [
+            r"state of\s+([A-Za-z ]{2,30})\b",
+            r"lessee(?:'s)?\s+address[\s\S]{0,120}?\b([A-Z]{2})\s+\d{5}(?:-\d{4})?\b",
+        ]
+        for pattern in patterns:
+            m = re.search(pattern, text, re.IGNORECASE)
+            if not m:
+                continue
+            candidate = m.group(1).strip()
+            if len(candidate) == 2 and candidate.isalpha():
+                return candidate.upper()
+            words = candidate.split()
+            if words:
+                return words[-1].title()
+        return None
+
+    def _extract_lease_region(self, text_lower: str) -> Optional[str]:
+        region_keywords = {
+            "urban": ("urban", "metro", "metropolitan", "city center"),
+            "suburban": ("suburban", "suburb"),
+            "rural": ("rural", "county"),
+            "coastal": ("coastal", "shore", "beach area"),
+        }
+        for region, keys in region_keywords.items():
+            if any(k in text_lower for k in keys):
+                return region
+        city_region_map = {
+            "mumbai": "urban",
+            "delhi": "urban",
+            "bangalore": "urban",
+            "new york": "urban",
+            "los angeles": "urban",
+        }
+        for city, region in city_region_map.items():
+            if city in text_lower:
+                return region
+        return None
+
+    def _extract_vehicle_condition(self, text_lower: str) -> Optional[str]:
+        if re.search(r"\b(excellent|like new|mint)\b", text_lower):
+            return "excellent"
+        if re.search(r"\b(good|well maintained)\b", text_lower):
+            return "good"
+        if re.search(r"\b(fair|average condition)\b", text_lower):
+            return "fair"
+        if re.search(r"\b(poor|heavy wear|major damage)\b", text_lower):
+            return "poor"
+        return None
+
+    def _extract_city(self, text: str) -> Optional[str]:
+        patterns = [
+            r"city of\s+([A-Za-z][A-Za-z\s\-]{1,40})\b",
+            r"lessee(?:'s)?\s+address[\s\S]{0,160}?,\s*([A-Za-z][A-Za-z\s\-]{1,40})\s*,\s*[A-Za-z]{2,}",
+        ]
+        for pattern in patterns:
+            m = re.search(pattern, text, re.IGNORECASE)
+            if m:
+                return " ".join(m.group(1).split()).title()
+        return None
+
+    def _extract_zip(self, text: str) -> Optional[str]:
+        # Prefer Canadian postal codes first (A1A 1A1 / A1A1A1).
+        m = re.search(r"\b([A-Z]\d[A-Z]\s?\d[A-Z]\d)\b", text, re.IGNORECASE)
+        if m:
+            return m.group(1).replace(" ", "").upper()
+
+        # Then US ZIP/ZIP+4.
+        m = re.search(r"\b(\d{5}(?:-\d{4})?)\b", text)
+        if m:
+            return m.group(1)
+        return None
+
+    def _extract_vin(self, text: str) -> Optional[str]:
+        upper = text.upper()
+
+        # First pass: strict VIN pattern.
+        m = re.search(r"\b([A-HJ-NPR-Z0-9]{17})\b", upper)
+        if m:
+            candidate = m.group(1)
+            if self._is_probable_vin(candidate):
+                return candidate
+
+        # Second pass: near VIN labels, tolerate OCR separators/noise.
+        for label in ("VIN", "VEHICLE IDENTIFICATION NUMBER"):
+            idx = upper.find(label)
+            if idx == -1:
+                continue
+            window = upper[idx: idx + 120]
+            cleaned = re.sub(r"[^A-Z0-9]", "", window)
+            # Keep only tail after label token to avoid picking chars from label text itself.
+            cleaned = cleaned.replace("VEHICLEIDENTIFICATIONNUMBER", "").replace("VIN", "")
+            if len(cleaned) < 17:
+                continue
+            # Try every 17-char slice and normalize common OCR confusions.
+            for i in range(0, len(cleaned) - 16):
+                candidate = cleaned[i:i + 17]
+                normalized = self._normalize_ocr_vin_candidate(candidate)
+                if re.fullmatch(r"[A-HJ-NPR-Z0-9]{17}", normalized) and self._is_probable_vin(normalized):
+                    return normalized
+
+        return None
+
+    def _normalize_ocr_vin_candidate(self, value: str) -> str:
+        """
+        Normalize common OCR mistakes for VIN strings.
+        VIN must not contain I, O, Q.
+        """
+        # Replace frequent OCR substitutions in VIN-like tokens.
+        v = value.replace("I", "1").replace("O", "0").replace("Q", "0")
+        return v
+
+    def _is_probable_vin(self, value: str) -> bool:
+        """
+        Guard against OCR false positives:
+        - VIN should be 17 chars with mixed alnum profile
+        - avoid obvious word-like artifacts
+        """
+        if not re.fullmatch(r"[A-HJ-NPR-Z0-9]{17}", value):
+            return False
+        digit_count = sum(1 for c in value if c.isdigit())
+        alpha_count = 17 - digit_count
+        if digit_count < 4 or alpha_count < 3:
+            return False
+        # Reject common OCR junk tokens from legal text.
+        bad_chunks = ("FEDERAL", "TAX", "SOCIAL", "NUMBER")
+        if any(chunk in value for chunk in bad_chunks):
+            return False
+        if not self._passes_vin_check_digit(value):
+            return False
+        return True
+
+    def _passes_vin_check_digit(self, vin: str) -> bool:
+        """
+        Validate VIN check digit (position 9) per ISO 3779/NHTSA logic.
+        """
+        if len(vin) != 17:
+            return False
+        translit = {
+            "A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8,
+            "J": 1, "K": 2, "L": 3, "M": 4, "N": 5, "P": 7, "R": 9,
+            "S": 2, "T": 3, "U": 4, "V": 5, "W": 6, "X": 7, "Y": 8, "Z": 9,
+            "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9,
+        }
+        weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
+        try:
+            total = 0
+            for i, ch in enumerate(vin):
+                total += translit[ch] * weights[i]
+            remainder = total % 11
+            expected = "X" if remainder == 10 else str(remainder)
+            return vin[8] == expected
+        except Exception:
+            return False
+
+    def _backfill_vehicle_identity_from_vin(self, data: Dict[str, Any]) -> None:
+        """
+        If VIN exists, decode it once and fill missing year/make/model fields.
+        """
+        if data.get("vehicle_year") and data.get("vehicle_make") and data.get("vehicle_model"):
+            return
+        vin = str(data.get("vin", "")).strip()
+        if len(vin) != 17:
+            return
+        try:
+            decoded = decode_vin(vin)
+        except Exception:
+            return
+        # If decode failed, drop VIN so downstream pricing doesn't use bad identity.
+        if decoded.get("error"):
+            data["vin"] = None
+            return
+        # If decode returns no usable identity, treat as bad VIN.
+        if not decoded.get("model_year") and not decoded.get("make") and not decoded.get("model"):
+            data["vin"] = None
+            return
+        if not data.get("vehicle_year") and decoded.get("model_year"):
+            try:
+                data["vehicle_year"] = int(decoded.get("model_year"))
+            except Exception:
+                pass
+        if not data.get("vehicle_make") and decoded.get("make"):
+            data["vehicle_make"] = str(decoded.get("make")).strip().lower()
+        if not data.get("vehicle_model") and decoded.get("model"):
+            data["vehicle_model"] = str(decoded.get("model")).strip().lower()
+
+    def _backfill_vehicle_identity_from_table(self, text: str, data: Dict[str, Any]) -> None:
+        """
+        Recover year/make/model from common lease-table rows in OCR text:
+        e.g. USED 2003 HONDA ACCORD ... 1HGCM...
+        """
+        if data.get("vehicle_year") and data.get("vehicle_make") and data.get("vehicle_model"):
+            return
+
+        # Try row format with explicit columns.
+        row_match = re.search(
+            r"(?:NEW|USED|DEMO)\s+(\d{4})\s+([A-Z][A-Z0-9\-]{1,20})\s+([A-Z][A-Z0-9\- ]{1,30})\s+(?:[A-Z0-9\- ]{0,20})\s+([A-HJ-NPR-Z0-9]{17})",
+            text.upper(),
+        )
+        if row_match:
+            year, make, model, vin = row_match.groups()
+            if not data.get("vehicle_year"):
+                try:
+                    data["vehicle_year"] = int(year)
+                except Exception:
+                    pass
+            if not data.get("vehicle_make"):
+                data["vehicle_make"] = make.strip().lower()
+            if not data.get("vehicle_model"):
+                data["vehicle_model"] = model.strip().lower()
+            if not data.get("vin") and self._is_probable_vin(vin):
+                data["vin"] = vin
+            return
+
+        # Try independent field labels.
+        if not data.get("vehicle_year"):
+            m = re.search(r"\b(?:YEAR)\s*[:\-]?\s*(\d{4})\b", text, re.IGNORECASE)
+            if m:
+                try:
+                    data["vehicle_year"] = int(m.group(1))
+                except Exception:
+                    pass
+        if not data.get("vehicle_make"):
+            m = re.search(r"\b(?:MAKE)\s*[:\-]?\s*([A-Za-z][A-Za-z0-9\-]{1,20})\b", text, re.IGNORECASE)
+            if m:
+                mk = m.group(1).strip().lower()
+                if mk not in {"model", "year", "code", "vehicle"}:
+                    data["vehicle_make"] = mk
+        if not data.get("vehicle_model"):
+            m = re.search(r"\b(?:MODEL)\s*[:\-]?\s*([A-Za-z][A-Za-z0-9\- ]{1,30})\b", text, re.IGNORECASE)
+            if m:
+                md = m.group(1).strip().lower()
+                if md not in {"code", "model code", "vehicle", "vehicle identification"}:
+                    # Trim if OCR captured following header words.
+                    md = re.split(r"\b(model\s+code|vehicle\s+identification)\b", md)[0].strip()
+                    if md:
+                        data["vehicle_model"] = md
+
+    def _extract_vehicle_mileage(self, text_lower: str) -> Optional[int]:
+        patterns = [
+            r"\b(?:odometer|mileage|miles)\s*(?:reading|at delivery|is|:)?\s*(\d{1,3}(?:,\d{3})+|\d{4,7})\b",
+            r"\b(\d{1,3}(?:,\d{3})+|\d{4,7})\s*miles\b",
+            r"\b(\d{1,3}(?:,\d{3})+|\d{4,7})\s*km\b",
+        ]
+        for p in patterns:
+            m = re.search(p, text_lower, re.IGNORECASE)
+            if not m:
+                continue
+            try:
+                value = int(m.group(1).replace(",", ""))
+                if " km" in m.group(0).lower():
+                    value = int(round(value * 0.621371))
+                return value
+            except Exception:
+                continue
+        return None
+
+    def _extract_address_components(self, text: str) -> Optional[Dict[str, str]]:
+        """
+        Extract city/province/postal from address-like strings.
+        Supports both Canadian and US style:
+          - Address: ..., Vancouver, BC, V6A 2B3
+          - Address: ..., Seattle, WA, 98101
+        """
+        # Focus on address lines/segments.
+        for m in re.finditer(r"address\s*:\s*([^\n\r]{10,220})", text, re.IGNORECASE):
+            segment = m.group(1).strip()
+            parsed = self._parse_city_state_postal(segment)
+            if parsed:
+                return parsed
+
+        # Fallback: parse any comma-separated city/state/postal sequence.
+        parsed = self._parse_city_state_postal(text)
+        return parsed
+
+    def _parse_city_state_postal(self, text: str) -> Optional[Dict[str, str]]:
+        patterns = [
+            # Canadian: City, BC, V6A 2B3
+            r",\s*([A-Za-z][A-Za-z .'\-]{1,40})\s*,\s*([A-Z]{2})\s*,\s*([A-Z]\d[A-Z]\s?\d[A-Z]\d)\b",
+            # US: City, WA, 98101 or 98101-1234
+            r",\s*([A-Za-z][A-Za-z .'\-]{1,40})\s*,\s*([A-Z]{2})\s*,\s*(\d{5}(?:-\d{4})?)\b",
+        ]
+        for pattern in patterns:
+            m = re.search(pattern, text, re.IGNORECASE)
+            if not m:
+                continue
+            city = " ".join(m.group(1).split()).title()
+            state_or_province = m.group(2).upper()
+            postal = m.group(3).replace(" ", "").upper()
+            return {
+                "city": city,
+                "state_or_province": state_or_province,
+                "postal_code": postal,
+            }
+        return None
 
     def _validate_and_create_contract_facts(self, data: Dict[str, Any]) -> Optional[ContractFacts]:
         """

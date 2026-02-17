@@ -43,6 +43,16 @@ class ContractFactsResponse(BaseModel):
     buyout_price: Optional[float]
     warranty_coverage: Optional[str]
     insurance_coverage: Optional[str]
+    vin: Optional[str]
+    vehicle_year: Optional[int]
+    vehicle_make: Optional[str]
+    vehicle_model: Optional[str]
+    vehicle_mileage: Optional[int]
+    lessee_zip: Optional[str]
+    lessee_city: Optional[str]
+    lessee_state: Optional[str]
+    lease_region: Optional[str]
+    vehicle_condition: Optional[str]
     created_at: str
 
     class Config:
@@ -79,6 +89,10 @@ class FairnessReportResponse(BaseModel):
     subscores: Dict[str, float]
     red_flags: List[str]
     explanations: Dict[str, str]
+    pricing_estimation_context: Dict[str, Any] = {}
+    recommended_price_range: Dict[str, Any] = {}
+    recommended_lease_deal: Dict[str, Any] = {}
+    recommended_terms: Dict[str, Any] = {}
     engine_version: str
 
 

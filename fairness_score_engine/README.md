@@ -9,6 +9,7 @@ A comprehensive system for extracting and analyzing car lease contract facts to 
 - **Database Storage**: SQLite-based storage for contract facts
 - **REST API**: FastAPI-based web service for PDF uploads and data retrieval
 - **Modular Architecture**: Clean separation of concerns with dedicated modules
+- **Online Dynamic Pricing (Optional)**: Live buyout benchmark support via external market API
 
 ## Installation
 
@@ -111,3 +112,49 @@ python scripts/run_extraction.py path/to/lease.pdf
 
 ### API Documentation
 When the server is running, visit `http://localhost:8000/docs` for interactive API documentation.
+
+## Online Pricing Configuration (No Hardcoded Region Multipliers)
+
+Set these environment variables to enable live, location-specific buyout benchmarking:
+
+```bash
+MARKET_PRICE_API_URL=https://your-pricing-service.example.com/benchmark
+MARKET_PRICE_API_KEY=your_key_if_required
+MARKET_PRICE_API_KEY_HEADER=x-api-key
+MARKET_PRICE_TIMEOUT_SEC=8
+```
+
+Expected API response formats:
+
+1. Direct stats:
+```json
+{ "mean": 17200, "std": 2800, "min": 12000, "max": 22500 }
+```
+
+2. Price list/listings:
+```json
+{ "prices": [16500, 17250, 18100, 16900] }
+```
+or
+```json
+{ "listings": [{ "price": 16500 }, { "price": 17250 }] }
+```
+
+If online pricing is unavailable, the engine automatically falls back to contract-economics-based dynamic estimation.
+
+### MarketCheck Provider Setup
+
+If you want to use MarketCheck directly (without your own aggregator service), set:
+
+```bash
+MARKET_PRICING_PROVIDER=marketcheck
+MARKET_PRICE_API_KEY=your_marketcheck_api_key
+MARKET_PRICE_API_SECRET=your_marketcheck_api_secret
+MARKETCHECK_USE_OAUTH=true
+MARKETCHECK_SEARCH_URL=https://api.marketcheck.com/v2/search/car/active
+MARKETCHECK_OAUTH_URL=https://api.marketcheck.com/oauth2/token
+```
+
+Notes:
+- If OAuth token fetch fails, the client falls back to `api_key` query auth.
+- Best results require `vin` or (`vehicle_year` + `vehicle_make` + `vehicle_model`) plus location (`lessee_city`+`lessee_state` or `lessee_zip`).

@@ -41,6 +41,16 @@ class ContractFacts(BaseModel):
     buyout_price: Optional[Decimal] = Field(None, ge=Decimal("0"))
     warranty_coverage: Optional[str] = None
     insurance_coverage: Optional[str] = None
+    vin: Optional[str] = None
+    vehicle_year: Optional[int] = Field(None, ge=1900, le=2100)
+    vehicle_make: Optional[str] = None
+    vehicle_model: Optional[str] = None
+    vehicle_mileage: Optional[int] = Field(None, ge=0)
+    lessee_zip: Optional[str] = None
+    lessee_city: Optional[str] = None
+    lessee_state: Optional[str] = None
+    lease_region: Optional[str] = None
+    vehicle_condition: Optional[str] = None
 
     @validator(
         "apr",

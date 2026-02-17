@@ -1,6 +1,6 @@
 from decimal import Decimal
 from enum import Enum
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field, validator
 
@@ -23,6 +23,10 @@ class FairnessReport(BaseModel):
 
     red_flags: List[str] = Field(default_factory=list)
     explanations: Dict[str, str] = Field(default_factory=dict)
+    pricing_estimation_context: Dict[str, Any] = Field(default_factory=dict)
+    recommended_price_range: Dict[str, Any] = Field(default_factory=dict)
+    recommended_lease_deal: Dict[str, Any] = Field(default_factory=dict)
+    recommended_terms: Dict[str, Any] = Field(default_factory=dict)
     engine_version: str = Field(default="1.0.0")
 
     # ---------- Parsing ----------

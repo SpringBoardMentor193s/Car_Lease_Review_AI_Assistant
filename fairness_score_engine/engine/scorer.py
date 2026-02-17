@@ -5,14 +5,14 @@ Rule-driven fairness scoring engine.
 import logging
 import re
 from decimal import Decimal, ROUND_HALF_UP
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from models.contract_facts import ContractFacts
 from models.fairness_report import FairnessReport, Verdict
 from models.scoring_rules import ScoringRules, Rule, ScoringMethod, Direction
+from engine.market_pricing import MarketPricingClient
 
 logger = logging.getLogger(__name__)
-
 
 def _to_decimal(value: Any) -> Optional[Decimal]:
     if value is None:
@@ -43,15 +43,43 @@ class FairnessScorer:
     def __init__(self, rules: ScoringRules, benchmarks: Dict[str, Dict[str, Any]]):
         self.rules = rules
         self.benchmarks = benchmarks or {}
+        self.market_pricing = MarketPricingClient()
 
     def score(self, facts: ContractFacts) -> FairnessReport:
         subscores: Dict[str, Decimal] = {}
         explanations: Dict[str, str] = {}
         red_flags = []
+        pricing_estimation_context: Dict[str, Any] = {}
 
+        buyout_rule = None
         for rule_name, rule in self.rules.rules.items():
+            if rule.field == "buyout_price":
+                buyout_rule = (rule_name, rule)
+                continue
             value = getattr(facts, rule.field, None)
-            score, explanation, flag = self._score_rule(rule, value)
+            score, explanation, flag = self._score_rule(
+                rule,
+                value,
+                facts,
+                subscores,
+                pricing_estimation_context,
+            )
+            subscores[rule_name] = score
+            if explanation:
+                explanations[rule_name] = explanation
+            if flag:
+                red_flags.append(flag)
+
+        if buyout_rule:
+            rule_name, rule = buyout_rule
+            value = getattr(facts, rule.field, None)
+            score, explanation, flag = self._score_rule(
+                rule,
+                value,
+                facts,
+                subscores,
+                pricing_estimation_context,
+            )
             subscores[rule_name] = score
             if explanation:
                 explanations[rule_name] = explanation
@@ -85,6 +113,7 @@ class FairnessScorer:
         clause_flags, clause_explanations = self._analyze_clause_red_flags(facts)
         red_flags.extend(clause_flags)
         explanations.update(clause_explanations)
+        recommendations = self._build_recommendations(facts, pricing_estimation_context)
 
         return FairnessReport(
             overall_score=overall_score,
@@ -92,6 +121,10 @@ class FairnessScorer:
             subscores=subscores,
             red_flags=red_flags,
             explanations=explanations,
+            pricing_estimation_context=pricing_estimation_context,
+            recommended_price_range=recommendations["recommended_price_range"],
+            recommended_lease_deal=recommendations["recommended_lease_deal"],
+            recommended_terms=recommendations["recommended_terms"],
         )
 
     def _weighted_average(self, subscores: Dict[str, Decimal]) -> Decimal:
@@ -110,12 +143,25 @@ class FairnessScorer:
             return Verdict.RISKY
         return Verdict.UNFAVORABLE
 
-    def _score_rule(self, rule: Rule, value: Any) -> tuple[Decimal, str, Optional[str]]:
+    def _score_rule(
+        self,
+        rule: Rule,
+        value: Any,
+        facts: ContractFacts,
+        context_subscores: Dict[str, Decimal],
+        pricing_estimation_context: Dict[str, Any],
+    ) -> tuple[Decimal, str, Optional[str]]:
         if value is None or (isinstance(value, str) and not value.strip()):
             return Decimal("50"), f"{rule.field} not found; default score applied", None
 
         if rule.method == ScoringMethod.Z_SCORE:
-            return self._score_z(rule, value)
+            return self._score_z(
+                rule,
+                value,
+                facts,
+                context_subscores,
+                pricing_estimation_context,
+            )
         if rule.method == ScoringMethod.CATEGORICAL_MAP:
             return self._score_categorical(rule, value)
         if rule.method == ScoringMethod.BOOLEAN_RULE:
@@ -123,12 +169,25 @@ class FairnessScorer:
 
         return Decimal("50"), f"Unknown method for {rule.field}; default score applied", None
 
-    def _score_z(self, rule: Rule, value: Any) -> tuple[Decimal, str, Optional[str]]:
+    def _score_z(
+        self,
+        rule: Rule,
+        value: Any,
+        facts: ContractFacts,
+        context_subscores: Dict[str, Decimal],
+        pricing_estimation_context: Dict[str, Any],
+    ) -> tuple[Decimal, str, Optional[str]]:
         val = _to_decimal(value)
         if val is None:
             return Decimal("50"), f"{rule.field} value invalid; default score applied", None
 
-        benchmark = self.benchmarks.get(rule.field, {})
+        benchmark, dynamic_note, benchmark_context = self._resolve_benchmark(
+            rule.field,
+            facts,
+            context_subscores,
+        )
+        if benchmark_context:
+            pricing_estimation_context.update(benchmark_context)
         mean = _to_decimal(benchmark.get("mean")) or Decimal("0")
         std = _to_decimal(benchmark.get("std")) or Decimal("1")
         min_val = _to_decimal(benchmark.get("min"))
@@ -154,7 +213,336 @@ class FairnessScorer:
             f"{rule.field}={val} vs market mean {mean} (std {std}); "
             f"direction {rule.direction.value if rule.direction else 'neutral'}"
         )
+        if dynamic_note:
+            explanation = f"{explanation}. {dynamic_note}"
         return score.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP), explanation, flag
+
+    def _resolve_benchmark(
+        self,
+        field: str,
+        facts: ContractFacts,
+        context_subscores: Dict[str, Decimal],
+    ) -> Tuple[Dict[str, Decimal], Optional[str], Optional[Dict[str, Any]]]:
+        if field != "buyout_price":
+            return self.benchmarks.get(field, {}), None, None
+
+        online = self.market_pricing.fetch_buyout_benchmark(facts)
+        if online:
+            context = self._build_pricing_context(
+                facts=facts,
+                source="marketcheck_online" if self.market_pricing.provider == "marketcheck" else "online_market_api",
+                benchmark=online,
+            )
+            return online, (
+                "Online market benchmark applied for buyout price using live location and condition comparables."
+            ), context
+
+        default_benchmark = self.benchmarks.get(field, {})
+        dynamic = self._build_dynamic_buyout_benchmark(facts, context_subscores, default_benchmark)
+        context = self._build_pricing_context(
+            facts=facts,
+            source="fallback_formula",
+            benchmark=dynamic["benchmark"],
+        )
+        return dynamic["benchmark"], dynamic["note"], context
+
+    def _build_dynamic_buyout_benchmark(
+        self,
+        facts: ContractFacts,
+        context_subscores: Dict[str, Decimal],
+        default_benchmark: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        base_mean = _to_decimal(default_benchmark.get("mean")) or Decimal("15000")
+
+        weighted_sum = base_mean * Decimal("0.35")
+        total_weight = Decimal("0.35")
+
+        if facts.residual_value_amount is not None:
+            weighted_sum += facts.residual_value_amount * Decimal("0.45")
+            total_weight += Decimal("0.45")
+
+        payment_total = facts.monthly_payment * Decimal(str(facts.lease_term_months))
+        if facts.down_payment is not None:
+            payment_total += facts.down_payment
+
+        lease_signal = payment_total * Decimal("0.45")
+        weighted_sum += lease_signal * Decimal("0.20")
+        total_weight += Decimal("0.20")
+
+        if facts.residual_value_percent is not None:
+            residual_signal = payment_total * (facts.residual_value_percent / Decimal("100"))
+            weighted_sum += residual_signal * Decimal("0.20")
+            total_weight += Decimal("0.20")
+
+        mean = weighted_sum / total_weight if total_weight else base_mean
+
+        context_score = self._safe_average(context_subscores)
+        fairness_multiplier = Decimal("1.00")
+        if context_score is not None:
+            if context_score < Decimal("50"):
+                fairness_multiplier = Decimal("0.92")
+            elif context_score < Decimal("65"):
+                fairness_multiplier = Decimal("0.97")
+            elif context_score > Decimal("80"):
+                fairness_multiplier = Decimal("1.03")
+
+        adjusted_mean = mean * fairness_multiplier
+        std = max(Decimal("1200"), adjusted_mean * Decimal("0.22"))
+        min_val = max(Decimal("1000"), adjusted_mean - (std * Decimal("2")))
+        max_val = adjusted_mean + (std * Decimal("2"))
+
+        benchmark = {
+            "mean": adjusted_mean.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+            "std": std.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+            "min": min_val.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+            "max": max_val.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+        }
+
+        note = (
+            "Fallback dynamic benchmark applied for buyout price using lease economics"
+            f" (context_score={context_score if context_score is not None else 'n/a'})."
+        )
+        return {"benchmark": benchmark, "note": note}
+
+    def _safe_average(self, subscores: Dict[str, Decimal]) -> Optional[Decimal]:
+        if not subscores:
+            return None
+        total = sum(subscores.values(), Decimal("0"))
+        return total / Decimal(str(len(subscores)))
+
+    def _build_pricing_context(
+        self,
+        facts: ContractFacts,
+        source: str,
+        benchmark: Dict[str, Decimal],
+    ) -> Dict[str, Any]:
+        def as_float(v: Any) -> Optional[float]:
+            d = _to_decimal(v)
+            return float(d) if d is not None else None
+
+        return {
+            "field": "buyout_price",
+            "source": source,
+            "vin_used": facts.vin,
+            "vehicle_identity": {
+                "year": facts.vehicle_year,
+                "make": facts.vehicle_make,
+                "model": facts.vehicle_model,
+            },
+            "lessee_location": {
+                "city": facts.lessee_city,
+                "state": facts.lessee_state,
+                "zip": facts.lessee_zip,
+                "region": facts.lease_region,
+            },
+            "vehicle_condition": facts.vehicle_condition,
+            "benchmark_used": {
+                "mean": as_float(benchmark.get("mean")),
+                "std": as_float(benchmark.get("std")),
+                "min": as_float(benchmark.get("min")),
+                "max": as_float(benchmark.get("max")),
+            },
+        }
+
+    def _build_recommendations(
+        self,
+        facts: ContractFacts,
+        pricing_estimation_context: Dict[str, Any],
+    ) -> Dict[str, Dict[str, Any]]:
+        buyout_benchmark = pricing_estimation_context.get("benchmark_used", {})
+        buyout_min = _to_decimal(buyout_benchmark.get("min"))
+        buyout_max = _to_decimal(buyout_benchmark.get("max"))
+        buyout_mean = _to_decimal(buyout_benchmark.get("mean"))
+
+        if buyout_min is None and buyout_mean is not None:
+            buyout_min = buyout_mean * Decimal("0.85")
+        if buyout_max is None and buyout_mean is not None:
+            buyout_max = buyout_mean * Decimal("1.15")
+
+        apr_benchmark = self.benchmarks.get("apr", {})
+        apr_mean = _to_decimal(apr_benchmark.get("mean"))
+        apr_std = _to_decimal(apr_benchmark.get("std")) or Decimal("1")
+        apr_target_max = (apr_mean + (apr_std * Decimal("0.5"))) if apr_mean is not None else None
+
+        monthly_benchmark = self.benchmarks.get("monthly_payment", {})
+        monthly_mean = _to_decimal(monthly_benchmark.get("mean"))
+        monthly_std = _to_decimal(monthly_benchmark.get("std")) or Decimal("1")
+        monthly_low = (monthly_mean - monthly_std) if monthly_mean is not None else None
+        monthly_high = (monthly_mean + monthly_std) if monthly_mean is not None else None
+
+        def as_money(value: Optional[Decimal]) -> Optional[float]:
+            if value is None:
+                return None
+            return float(value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+        def as_rate(value: Optional[Decimal]) -> Optional[float]:
+            if value is None:
+                return None
+            return float(value.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP))
+
+        recommended_price_range = {
+            "field": "buyout_price",
+            "label": "purchase_option_buyout_price",
+            "currency": "USD",
+            "fair_low": as_money(buyout_min),
+            "fair_high": as_money(buyout_max),
+            "fair_target": as_money(buyout_mean),
+            "basis": pricing_estimation_context.get("source", "fallback_formula"),
+        }
+
+        recommended_lease_deal = {
+            "target_apr_max_percent": as_rate(apr_target_max),
+            "target_monthly_payment_range": {
+                "low": as_money(monthly_low),
+                "high": as_money(monthly_high),
+            },
+            "target_buyout_price_range": {
+                "low": as_money(buyout_min),
+                "high": as_money(buyout_max),
+                "target": as_money(buyout_mean),
+            },
+            "current_contract_snapshot": {
+                "apr_percent": as_rate(facts.apr),
+                "monthly_payment": as_money(facts.monthly_payment),
+                "buyout_price": as_money(facts.buyout_price),
+            },
+        }
+
+        recommended_terms = {
+            "apr": self._build_apr_recommendation(
+                current_apr=facts.apr,
+                apr_mean=apr_mean,
+                apr_std=apr_std,
+            ),
+            "monthly_payment": self._build_monthly_payment_recommendation(
+                current_monthly=facts.monthly_payment,
+                monthly_mean=monthly_mean,
+                monthly_std=monthly_std,
+            ),
+            "buyout_price": self._build_buyout_recommendation(
+                current_buyout=facts.buyout_price,
+                buyout_min=buyout_min,
+                buyout_max=buyout_max,
+                buyout_mean=buyout_mean,
+                source=pricing_estimation_context.get("source", "fallback_formula"),
+            ),
+        }
+
+        return {
+            "recommended_price_range": recommended_price_range,
+            "recommended_lease_deal": recommended_lease_deal,
+            "recommended_terms": recommended_terms,
+        }
+
+    def _build_apr_recommendation(
+        self,
+        current_apr: Optional[Decimal],
+        apr_mean: Optional[Decimal],
+        apr_std: Decimal,
+    ) -> Dict[str, Any]:
+        if apr_mean is None:
+            return {
+                "current": float(current_apr) if current_apr is not None else None,
+                "recommended": None,
+                "range": {"low": None, "high": None},
+                "unit": "percent",
+                "source": "benchmark_static",
+                "confidence": "low",
+                "why": "APR benchmark unavailable.",
+            }
+
+        low = max(Decimal("0"), apr_mean - apr_std)
+        high = apr_mean + (apr_std * Decimal("0.5"))
+        recommended = min(apr_mean, high)
+        current = current_apr if current_apr is not None else apr_mean
+
+        confidence = "medium"
+        why = "APR target based on benchmark mean and spread."
+        if current_apr is not None and current_apr > high:
+            why = "Current APR is above benchmark; target is within fair benchmark band."
+
+        return {
+            "current": float(current.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)),
+            "recommended": float(recommended.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)),
+            "range": {
+                "low": float(low.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)),
+                "high": float(high.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)),
+            },
+            "unit": "percent",
+            "source": "benchmark_static",
+            "confidence": confidence,
+            "why": why,
+        }
+
+    def _build_monthly_payment_recommendation(
+        self,
+        current_monthly: Optional[Decimal],
+        monthly_mean: Optional[Decimal],
+        monthly_std: Decimal,
+    ) -> Dict[str, Any]:
+        if monthly_mean is None:
+            return {
+                "current": float(current_monthly) if current_monthly is not None else None,
+                "recommended": None,
+                "range": {"low": None, "high": None},
+                "unit": "USD/month",
+                "source": "benchmark_static",
+                "confidence": "low",
+                "why": "Monthly payment benchmark unavailable.",
+            }
+
+        low = max(Decimal("0"), monthly_mean - monthly_std)
+        high = monthly_mean + monthly_std
+        recommended = monthly_mean
+        current = current_monthly if current_monthly is not None else monthly_mean
+
+        why = "Monthly payment target based on benchmark range for similar lease structures."
+        if current_monthly is not None and current_monthly > high:
+            why = "Current monthly payment is above benchmark high; target set near benchmark mean."
+        elif current_monthly is not None and current_monthly < low:
+            why = "Current monthly payment is below benchmark low; likely favorable versus market."
+
+        return {
+            "current": float(current.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)),
+            "recommended": float(recommended.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)),
+            "range": {
+                "low": float(low.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)),
+                "high": float(high.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)),
+            },
+            "unit": "USD/month",
+            "source": "benchmark_static",
+            "confidence": "medium",
+            "why": why,
+        }
+
+    def _build_buyout_recommendation(
+        self,
+        current_buyout: Optional[Decimal],
+        buyout_min: Optional[Decimal],
+        buyout_max: Optional[Decimal],
+        buyout_mean: Optional[Decimal],
+        source: str,
+    ) -> Dict[str, Any]:
+        confidence = "high" if source in {"marketcheck_online", "online_market_api"} else "medium"
+        why = "Buyout target derived from live market comparables." if confidence == "high" else (
+            "Buyout target derived from dynamic fallback benchmark."
+        )
+        current = current_buyout if current_buyout is not None else buyout_mean
+
+        def money(v: Optional[Decimal]) -> Optional[float]:
+            if v is None:
+                return None
+            return float(v.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+        return {
+            "current": money(current),
+            "recommended": money(buyout_mean),
+            "range": {"low": money(buyout_min), "high": money(buyout_max)},
+            "unit": "USD",
+            "source": source,
+            "confidence": confidence,
+            "why": why,
+        }
 
     def _analyze_clause_red_flags(self, facts: ContractFacts) -> tuple[list[str], Dict[str, str]]:
         flags: list[str] = []

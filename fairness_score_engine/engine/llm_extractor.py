@@ -39,7 +39,17 @@ EXTRACTION_SCHEMA = {
     "maintenance_responsibility": "Who is responsible for maintenance: 'lessee', 'lessor', or 'shared'",
     "buyout_price": "Purchase option or buyout price in dollars",
     "warranty_coverage": "Warranty coverage details",
-    "insurance_coverage": "Insurance requirements or coverage details"
+    "insurance_coverage": "Insurance requirements or coverage details",
+    "vin": "17-character VIN if present",
+    "vehicle_year": "Vehicle model year (e.g., 2022)",
+    "vehicle_make": "Vehicle make/brand (e.g., Toyota, Honda)",
+    "vehicle_model": "Vehicle model (e.g., Camry, Civic)",
+    "vehicle_mileage": "Current odometer mileage in miles",
+    "lessee_zip": "Lessee ZIP or postal code if present",
+    "lessee_city": "Lessee city if present (e.g., Mumbai, Pune, New York)",
+    "lessee_state": "Lessee state abbreviation or state name if present (e.g., CA or California)",
+    "lease_region": "Lease market region if explicit (urban, suburban, rural, coastal)",
+    "vehicle_condition": "Vehicle condition if explicit (excellent, good, fair, poor)"
 }
 
 SYSTEM_PROMPT = """You are an expert at extracting structured data from car lease contracts.
@@ -155,12 +165,14 @@ Return a JSON object with the extracted values. Use null for fields not found.""
         ]
         
         # Integer fields
-        int_fields = ['lease_term_months', 'mileage_limit_per_year']
+        int_fields = ['lease_term_months', 'mileage_limit_per_year', 'vehicle_year', 'vehicle_mileage']
         
         # String fields
         string_fields = [
             'early_termination_policy', 'late_fee_policy',
-            'maintenance_responsibility', 'warranty_coverage', 'insurance_coverage'
+            'maintenance_responsibility', 'warranty_coverage', 'insurance_coverage',
+            'vin', 'vehicle_make', 'vehicle_model', 'lessee_zip',
+            'lessee_city', 'lessee_state', 'lease_region', 'vehicle_condition'
         ]
         
         for field in decimal_fields:
@@ -192,6 +204,22 @@ Return a JSON object with the extracted values. Use null for fields not found.""
                     value = str(value).lower().strip()
                     if value not in ('lessee', 'lessor', 'shared'):
                         continue
+                if field == 'vin':
+                    value = str(value).upper().strip()
+                    if len(value) != 17:
+                        continue
+                if field == 'lease_region':
+                    value = str(value).lower().strip()
+                    if value not in ('urban', 'suburban', 'rural', 'coastal'):
+                        continue
+                if field == 'lessee_city':
+                    value = str(value).strip().title()
+                if field == 'vehicle_condition':
+                    value = str(value).lower().strip()
+                    if value not in ('excellent', 'good', 'fair', 'poor'):
+                        continue
+                if field == 'lessee_state':
+                    value = str(value).upper().strip()
                 result[field] = str(value).strip()
         
         return result

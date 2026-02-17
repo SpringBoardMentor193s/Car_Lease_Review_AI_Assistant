@@ -29,6 +29,16 @@ class ContractFactsDB:
                     buyout_price REAL,
                     warranty_coverage TEXT,
                     insurance_coverage TEXT,
+                    vin TEXT,
+                    vehicle_year INTEGER,
+                    vehicle_make TEXT,
+                    vehicle_model TEXT,
+                    vehicle_mileage INTEGER,
+                    lessee_zip TEXT,
+                    lessee_city TEXT,
+                    lessee_state TEXT,
+                    lease_region TEXT,
+                    vehicle_condition TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
@@ -39,6 +49,26 @@ class ContractFactsDB:
                 cursor.execute("ALTER TABLE contract_facts ADD COLUMN residual_value_amount REAL")
             if "maintenance_clause" not in columns:
                 cursor.execute("ALTER TABLE contract_facts ADD COLUMN maintenance_clause TEXT")
+            if "vin" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vin TEXT")
+            if "vehicle_year" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vehicle_year INTEGER")
+            if "vehicle_make" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vehicle_make TEXT")
+            if "vehicle_model" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vehicle_model TEXT")
+            if "vehicle_mileage" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vehicle_mileage INTEGER")
+            if "lessee_zip" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN lessee_zip TEXT")
+            if "lessee_state" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN lessee_state TEXT")
+            if "lessee_city" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN lessee_city TEXT")
+            if "lease_region" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN lease_region TEXT")
+            if "vehicle_condition" not in columns:
+                cursor.execute("ALTER TABLE contract_facts ADD COLUMN vehicle_condition TEXT")
             conn.commit()
 
     def insert_contract_facts(self, facts: ContractFacts) -> int:
@@ -50,8 +80,10 @@ class ContractFactsDB:
                     mileage_limit_per_year, overage_fee_per_mile, early_termination_policy,
                     residual_value_percent, residual_value_amount, late_fee_policy, maintenance_responsibility,
                     maintenance_clause,
-                    buyout_price, warranty_coverage, insurance_coverage
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    buyout_price, warranty_coverage, insurance_coverage,
+                    vin, vehicle_year, vehicle_make, vehicle_model, vehicle_mileage, lessee_zip,
+                    lessee_city, lessee_state, lease_region, vehicle_condition
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 float(facts.apr) if facts.apr else None,
                 float(facts.monthly_payment) if facts.monthly_payment else None,
@@ -67,7 +99,17 @@ class ContractFactsDB:
                 facts.maintenance_clause,
                 float(facts.buyout_price) if facts.buyout_price else None,
                 facts.warranty_coverage,
-                facts.insurance_coverage
+                facts.insurance_coverage,
+                facts.vin,
+                facts.vehicle_year,
+                facts.vehicle_make,
+                facts.vehicle_model,
+                facts.vehicle_mileage,
+                facts.lessee_zip,
+                facts.lessee_city,
+                facts.lessee_state,
+                facts.lease_region,
+                facts.vehicle_condition,
             ))
             conn.commit()
             return cursor.lastrowid
