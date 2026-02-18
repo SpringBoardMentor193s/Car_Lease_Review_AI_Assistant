@@ -43,7 +43,7 @@ When Tesseract is installed, the backend will automatically try to extract text 
    python app.py
    ```
 
-Server will start on `http://localhost:5000`
+Server will start on `http://localhost:3000`
 
 ## API Endpoints
 

@@ -1,5 +1,5 @@
 // Shared Chatbot functionality
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://localhost:3000';
 
 // Initialize chatbot
 function initializeChatbot() {

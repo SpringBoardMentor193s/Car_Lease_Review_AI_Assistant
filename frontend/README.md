@@ -7,7 +7,7 @@ Modern, responsive web interface for file upload and AI analysis.
 **Option 1: Direct File Open**
 - Open `index.html` in your web browser
 
-**Option 2: Local Server**
+**Option 2: Local Server (Recommended)**
 ```bash
 python -m http.server 8000
 ```

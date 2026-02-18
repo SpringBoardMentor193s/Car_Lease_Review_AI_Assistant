@@ -87,7 +87,7 @@ From the `backend` directory with virtual environment activated:
 python app.py
 ```
 
-The backend API will start on `http://localhost:5000`
+The backend API will start on `http://localhost:3000`
 
 ### 3. Start Frontend
 
@@ -181,7 +181,7 @@ Edit `.env` file or modify `app.py`:
 
 Edit `script.js`:
 
-- **API URL**: `const API_URL = 'http://localhost:5000'`
+- **API URL**: `const API_URL = 'http://localhost:3000'`
 
 ## Troubleshooting
 
@@ -192,7 +192,7 @@ Edit `script.js`:
 
 ### CORS Errors
 - Make sure Flask-CORS is installed
-- Check that the backend is running on port 5000
+- Check that the backend is running on port 3000
 - Update `API_URL` in `script.js` if using different port
 
 ### File Upload Fails

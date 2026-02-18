@@ -13,6 +13,7 @@ build/
 venv/
 env/
 ENV/
+dharanesh/
 .venv/
 *.venv
 

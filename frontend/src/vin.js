@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://localhost:3000';
 
 const vinInput = document.getElementById('vinInput');
 const btnAnalyze = document.getElementById('btnAnalyze');
