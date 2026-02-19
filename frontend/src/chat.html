@@ -4,81 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negotiation Assistant - Car Lease Project</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="home-styles.css">
     <style>
-        .chat-container {
+        .chat-page-container {
             max-width: 900px;
             margin: 0 auto;
-            height: calc(100vh - 200px);
+            height: calc(100vh - 180px);
             display: flex;
             flex-direction: column;
         }
 
-        .chat-header-bar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        .chat-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             padding: 1.5rem;
-            border-radius: 1rem 1rem 0 0;
-            box-shadow: var(--shadow-md);
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .chat-header-bar h2 {
-            color: white;
+        .chat-header h2 {
             margin: 0 0 0.5rem 0;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
         }
 
-        .chat-description {
+        .chat-header p {
+            margin: 0;
             opacity: 0.95;
             font-size: 0.95rem;
         }
 
         .chat-main {
             flex: 1;
-            background: var(--card-bg);
-            border-left: 2px solid var(--border-color);
-            border-right: 2px solid var(--border-color);
-            overflow: hidden;
+            background: white;
             display: flex;
             flex-direction: column;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
         }
 
-        .chat-messages {
+        .chat-window-full {
             flex: 1;
             overflow-y: auto;
             padding: 1.5rem;
-            background: var(--bg-color);
+            background: #f9fafb;
+        }
+
+        .chat-input-area {
+            padding: 1rem 1.5rem;
+            background: white;
+            border-top: 1px solid #e5e7eb;
             display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .chat-input-full {
+            flex: 1;
+            padding: 0.875rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 60px;
+            max-height: 200px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input-full:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .chat-buttons {
+            display: flex;
+            gap: 0.5rem;
             flex-direction: column;
+        }
+
+        .btn-chat {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-send-full {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-send-full:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-clear-full {
+            background: #ef4444;
+            color: white;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-clear-full:hover {
+            background: #dc2626;
+        }
+
+        .navigation-links {
+            text-align: center;
+            margin-top: 1rem;
+            display: flex;
             gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
+        .navigation-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
         }
 
-        .chat-messages::-webkit-scrollbar-track {
-            background: var(--bg-color);
+        .navigation-links a:hover {
+            color: #2563eb;
         }
 
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
+        .fine-tune-indicator-page {
+            padding: 0.75rem 1rem;
+            margin: 1rem 1.5rem 0 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #3b82f6;
+            display: none;
+            align-items: center;
+            gap: 8px;
         }
 
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: var(--border-hover);
-        }
-
-        .message {
-            max-width: 75%;
+        .chat-bubble {
+            margin-bottom: 1rem;
             padding: 1rem 1.25rem;
-            border-radius: 1rem;
-            line-height: 1.6;
-            animation: messageSlide 0.3s ease;
+            border-radius: 12px;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
         }
 
-        @keyframes messageSlide {
+        .chat-bubble.user {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-bubble.assistant {
+            background: white;
+            color: #1f2937;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 3rem 1rem;
+            font-size: 1.1rem;
+        }
+
+        .assistant-section {
+            margin-bottom: 1rem;
+        }
+
+        .assistant-section strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .assistant-section ul,
+        .assistant-section ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .assistant-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .assistant-sub {
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .assistant-suggest {
+            background: #f3f4f6;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .assistant-note {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -89,201 +238,47 @@
             }
         }
 
-        .message.user {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 0.25rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .message.assistant {
-            background: white;
-            color: var(--text-primary);
-            margin-right: auto;
-            border-bottom-left-radius: 0.25rem;
-            border: 2px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .message.typing {
-            background: white;
-            color: var(--text-muted);
-            margin-right: auto;
-            border: 2px solid var(--border-color);
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 0.4rem;
-            padding: 0.5rem 0;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--text-muted);
-            border-radius: 50%;
-            animation: typingDot 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typingDot {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .message-empty {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 3rem 1rem;
-            font-size: 1rem;
-        }
-
-        .chat-input-area {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 0 0 1rem 1rem;
-            border: 2px solid var(--border-color);
-            border-top: none;
-            box-shadow: var(--shadow-md);
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-
-        .chat-input-wrapper textarea {
-            flex: 1;
-            padding: 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0.75rem;
-            resize: none;
-            font-family: inherit;
-            font-size: 1rem;
-            color: var(--text-primary);
-            background: var(--bg-color);
-            transition: all 0.2s;
-            min-height: 60px;
-            max-height: 150px;
-        }
-
-        .chat-input-wrapper textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-        }
-
-        .chat-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-direction: column;
-        }
-
-        .chat-actions button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-
-        .btn-send {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-            color: white;
-        }
-
-        .btn-send:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-send:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-clear {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 2px solid var(--border-color);
-        }
-
-        .btn-clear:hover {
-            background: var(--bg-secondary);
-            border-color: var(--border-hover);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .back-link:hover {
-            transform: translateX(-5px);
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         @media (max-width: 768px) {
-            .chat-container {
+            .chat-page-container {
                 height: calc(100vh - 150px);
             }
 
-            .message {
-                max-width: 85%;
-            }
-
-            .chat-actions {
-                flex-direction: row;
-            }
-
-            .chat-input-wrapper {
+            .chat-input-area {
                 flex-direction: column;
-                align-items: stretch;
             }
 
-            .chat-actions button {
+            .chat-buttons {
+                flex-direction: row;
+                width: 100%;
+            }
+
+            .btn-chat {
                 flex: 1;
+            }
+
+            .chat-bubble {
+                max-width: 95%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <a href="home.html" class="back-link">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6"></polyline>
+        <header class="main-header">
+            <div class="logo-section">
+                <svg class="logo-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
-                Back to Home
-            </a>
-            <h1>💬 Negotiation Assistant</h1>
-            <p class="subtitle">AI-powered help for car lease contract negotiation</p>
+                <div>
+                    <h1>💬 Negotiation Assistant</h1>
+                    <p class="subtitle">AI-powered car lease and loan contract analysis</p>
+                </div>
+            </div>
         </header>
 
         <div class="status-bar">
@@ -293,45 +288,471 @@
             </div>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-header-bar">
-                <h2>Chat with AI Assistant</h2>
-                <p class="chat-description">Ask questions about contract terms, negotiation strategies, and get personalized advice.</p>
-            </div>
-            
-            <div class="chat-main">
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message-empty">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.3; margin: 0 auto 1rem;">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        <p>Start a conversation with the negotiation assistant</p>
-                    </div>
-                </div>
+        <div class="chat-page-container">
+            <div class="chat-header">
+                <h2>🚗 Car Lease Negotiation Assistant</h2>
+                <p>Get expert advice on reviewing and negotiating your car lease or loan contract</p>
             </div>
 
-            <div class="chat-input-area">
-                <div class="chat-input-wrapper">
+            <div class="chat-main">
+                <div class="chat-window-full" id="chatWindow">
+                    <div class="chat-empty">Starting conversation...</div>
+                </div>
+
+                <div class="fine-tune-indicator-page" id="fineTuneIndicator"></div>
+
+                <div class="chat-input-area">
                     <textarea 
                         id="chatInput" 
-                        placeholder="Type your message here... (Press Enter to send, Shift+Enter for new line)"
+                        class="chat-input-full" 
+                        placeholder="Ask about your contract terms, interest rates, mileage limits, or get negotiation advice..."
                         rows="2"
                     ></textarea>
-                    <div class="chat-actions">
-                        <button id="btnSend" class="btn-send">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="chat-buttons">
+                        <button class="btn-chat btn-send-full" id="btnSend">
+                            <svg style="display: inline; margin-right: 0.5rem;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                             </svg>
                             Send
                         </button>
-                        <button id="btnClear" class="btn-clear">Clear</button>
+                        <button class="btn-chat btn-clear-full" id="btnClearChat">Clear</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="navigation-links">
+            <a href="home.html">← Home</a>
+            <a href="index.html">📄 SLA Extractor</a>
+            <a href="vin.html">🔍 VIN Analyzer</a>
+        </div>
     </div>
 
-    <script src="chat-page.js"></script>
+    <script>
+        console.log('[chat] ════════════════════════════════════════════════');
+        console.log('[chat] Chat page script loading...');
+        console.log('[chat] ════════════════════════════════════════════════');
+        
+        const API_URL = 'http://localhost:3000';
+
+        // DOM Elements - will be initialized in DOMContentLoaded
+        let statusIndicator, statusText, chatWindow, chatInput, btnSend, btnClearChat, fineTuneIndicator;
+
+        // Chat state
+        window._chatHistory = [];
+        let autoStarted = false;
+        let isStarting = false;
+
+        // Load chat history from sessionStorage if available
+        function loadChatHistory() {
+            try {
+                const saved = sessionStorage.getItem('chat_history');
+                if (saved) {
+                    window._chatHistory = JSON.parse(saved);
+                    console.log('[chat] Loaded', window._chatHistory.length, 'messages from session');
+                    return true;
+                }
+            } catch (e) {
+                console.error('[chat] Failed to load history:', e);
+            }
+            return false;
+        }
+
+        // Save chat history to sessionStorage
+        function saveChatHistory() {
+            try {
+                sessionStorage.setItem('chat_history', JSON.stringify(window._chatHistory));
+            } catch (e) {
+                console.error('[chat] Failed to save history:', e);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[chat] DOM loaded - initializing elements...');
+            
+            // Get DOM elements NOW that they exist
+            statusIndicator = document.getElementById('statusIndicator');
+            statusText = document.getElementById('statusText');
+            chatWindow = document.getElementById('chatWindow');
+            chatInput = document.getElementById('chatInput');
+            btnSend = document.getElementById('btnSend');
+            btnClearChat = document.getElementById('btnClearChat');
+            fineTuneIndicator = document.getElementById('fineTuneIndicator');
+            
+            console.log('[chat] Elements found:');
+            console.log('[chat]   - chatWindow:', chatWindow);
+            console.log('[chat]   - chatInput:', chatInput);
+            console.log('[chat]   - btnSend:', btnSend);
+            console.log('[chat]   - btnClearChat:', btnClearChat);
+            
+            if (!chatWindow || !chatInput || !btnSend) {
+                console.error('[chat] CRITICAL: Required elements not found!');
+                return;
+            }
+            
+            checkHealth();
+            setupEventListeners();
+            
+            // Try to load existing chat history first
+            const hasHistory = loadChatHistory();
+            
+            if (hasHistory && window._chatHistory.length > 0) {
+                console.log('[chat] Restored previous chat session');
+                renderChat();
+            } else {
+                // No history, start fresh conversation
+                console.log('[chat] Starting fresh conversation...');
+                autoStarted = true;
+                startNegotiationChat();
+            }
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            btnSend.addEventListener('click', sendChatMessage);
+            btnClearChat.addEventListener('click', clearChat);
+
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+        }
+
+        // Check API health
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                
+                const statusDot = statusIndicator.querySelector('.status-dot');
+                
+                if (data.status === 'healthy') {
+                    statusDot.classList.add('connected');
+                    statusDot.classList.remove('disconnected');
+                    statusText.textContent = 'Connected to Ollama';
+                } else {
+                    statusDot.classList.add('disconnected');
+                    statusDot.classList.remove('connected');
+                    statusText.textContent = 'Ollama disconnected';
+                }
+                
+                checkFineTuningStatus();
+            } catch (error) {
+                const statusDot = statusIndicator.querySelector('.status-dot');
+                statusDot.classList.add('disconnected');
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'API unavailable';
+                console.error('Health check failed:', error);
+            }
+        }
+
+        // Check fine-tuning status
+        async function checkFineTuningStatus() {
+            try {
+                const response = await fetch(`${API_URL}/fine-tune-status`);
+                const data = await response.json();
+                
+                if (data.success && data.fine_tuning) {
+                    updateFineTuningUI(data.fine_tuning);
+                    
+                    if (data.fine_tuning.is_running) {
+                        setTimeout(checkFineTuningStatus, 3000);
+                    }
+                }
+            } catch (error) {
+                console.error('Fine-tuning status check failed:', error);
+            }
+        }
+
+        // Update fine-tuning UI
+        function updateFineTuningUI(status) {
+            if (status.is_running) {
+                const statusText = status.status === 'analyzing' ? 
+                    `Analyzing conversations... ${status.progress}%` :
+                    status.status === 'training' ?
+                    `Training model... ${status.progress}%` :
+                    `Processing... ${status.progress}%`;
+                
+                fineTuneIndicator.innerHTML = `
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; 
+                                 background: #3b82f6; animation: pulse 2s ease-in-out infinite;"></span>
+                    <span>${statusText}</span>
+                `;
+                fineTuneIndicator.style.display = 'flex';
+            } else if (status.status === 'completed' && status.last_run) {
+                const lastRun = new Date(status.last_run);
+                const timeAgo = getTimeAgo(lastRun);
+                fineTuneIndicator.innerHTML = `
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+                    <span>Model optimized ${timeAgo} (${status.conversations_processed} conversations analyzed)</span>
+                `;
+                fineTuneIndicator.style.display = 'flex';
+                fineTuneIndicator.style.background = 'rgba(16, 185, 129, 0.1)';
+                fineTuneIndicator.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                fineTuneIndicator.style.color = '#10b981';
+                
+                setTimeout(() => {
+                    fineTuneIndicator.style.display = 'none';
+                }, 10000);
+            } else {
+                fineTuneIndicator.style.display = 'none';
+            }
+        }
+
+        // Helper function
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+            return `${Math.floor(seconds / 86400)} days ago`;
+        }
+
+        // Start negotiation
+        async function startNegotiationChat() {
+            // Prevent concurrent auto-start calls
+            if (isStarting) {
+                console.log('[chat] Already starting, skipping duplicate call');
+                return;
+            }
+            
+            isStarting = true;
+            console.log('[chat] Starting negotiation...');
+            
+            window._chatHistory = [];
+            renderChat();
+            
+            window._chatHistory.push({ role: 'assistant', content: '...' });
+            renderChat();
+
+            try {
+                const resp = await fetch(`${API_URL}/negotiation-start`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+
+                console.log('[chat] Negotiation start response status:', resp.status);
+                const data = await resp.json();
+                console.log('[chat] Negotiation start data:', data);
+                
+                if (window._chatHistory.length && window._chatHistory[window._chatHistory.length - 1].content === '...') {
+                    window._chatHistory.pop();
+                }
+                
+                if (data.success && data.greeting) {
+                    console.log('[chat] Got greeting:', data.greeting.substring(0, 100));
+                    window._chatHistory.push({ role: 'assistant', content: data.greeting });
+                    window._currentSessionId = data.session_id;
+                    renderChat();
+                } else if (data.error) {
+                    console.error('[chat] Error starting:', data.error);
+                    window._chatHistory.push({ role: 'assistant', content: 'Error starting negotiation: ' + data.error });
+                    renderChat();
+                } else {
+                    console.error('[chat] No greeting in response:', data);
+                    window._chatHistory.push({ role: 'assistant', content: 'Failed to start negotiation chat' });
+                    renderChat();
+                }
+            } catch (err) {
+                console.error('[chat] Exception starting negotiation:', err);
+                if (window._chatHistory.length && window._chatHistory[window._chatHistory.length - 1].content === '...') {
+                    window._chatHistory.pop();
+                }
+                window._chatHistory.push({ role: 'assistant', content: 'Failed to connect: ' + (err.message || err) });
+                renderChat();
+            } finally {
+                isStarting = false;
+            }
+        }
+
+        // Send message
+        async function sendChatMessage() {
+            const text = (chatInput.value || '').trim();
+            if (!text) return;
+
+            console.log('[chat] Sending message:', text);
+            
+            window._chatHistory.push({ role: 'user', content: text });
+            renderChat();
+            chatInput.value = '';
+
+            window._chatHistory.push({ role: 'assistant', content: '...' });
+            renderChat();
+
+            try {
+                const payload = { 
+                    preset: 'car_negotiation',
+                    messages: window._chatHistory.filter(m => m.content !== '...').map(m => ({ role: m.role, content: m.content }))
+                };
+                
+                console.log('[chat] Sending payload:', payload);
+                
+                const resp = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('[chat] Response status:', resp.status);
+                const data = await resp.json();
+                console.log('[chat] Response data:', data);
+                
+                if (window._chatHistory.length && window._chatHistory[window._chatHistory.length - 1].content === '...') {
+                    window._chatHistory.pop();
+                }
+
+                if (data.success && data.reply) {
+                    console.log('[chat] Got reply:', data.reply.substring(0, 100));
+                    window._chatHistory.push({ role: 'assistant', content: data.reply });
+                } else if (data.error) {
+                    console.error('[chat] Error from server:', data.error);
+                    window._chatHistory.push({ role: 'assistant', content: 'Error: ' + data.error });
+                } else {
+                    console.error('[chat] No reply in response:', data);
+                    window._chatHistory.push({ role: 'assistant', content: 'No response from server' });
+                }
+                renderChat();
+            } catch (err) {
+                console.error('[chat] Exception:', err);
+                if (window._chatHistory.length && window._chatHistory[window._chatHistory.length - 1].content === '...') {
+                    window._chatHistory.pop();
+                }
+                window._chatHistory.push({ role: 'assistant', content: 'Failed to send message: ' + (err.message || err) });
+                renderChat();
+            }
+        }
+
+        // Render chat
+        function renderChat() {
+            console.log('[chat] renderChat called, history length:', window._chatHistory.length);
+            
+            if (!chatWindow) {
+                console.error('[chat] chatWindow element not found!');
+                return;
+            }
+            
+            chatWindow.innerHTML = '';
+            
+            if (window._chatHistory.length === 0) {
+                const el = document.createElement('div');
+                el.className = 'chat-empty';
+                el.textContent = 'Start a conversation with the assistant';
+                chatWindow.appendChild(el);
+                console.log('[chat] Showing empty state');
+                return;
+            }
+
+            console.log('[chat] Rendering', window._chatHistory.length, 'messages');
+            
+            for (const msg of window._chatHistory) {
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble ' + (msg.role === 'user' ? 'user' : 'assistant');
+                
+                console.log('[chat] Rendering message:', msg.role, msg.content.substring(0, 50));
+                
+                if (msg.role === 'assistant' && msg.content && msg.content.trim() !== '...') {
+                    bubble.innerHTML = formatAssistantContent(msg.content);
+                } else {
+                    bubble.textContent = msg.content;
+                }
+                chatWindow.appendChild(bubble);
+            }
+            
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            console.log('[chat] Scroll to bottom:', chatWindow.scrollHeight);
+            
+            // Save history to sessionStorage
+            saveChatHistory();
+        }
+
+        // Format assistant content
+        function formatAssistantContent(content) {
+            let parsed = null;
+            try {
+                parsed = JSON.parse(content);
+            } catch (e) {
+                const jsonMatch = content.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+                if (jsonMatch) {
+                    try { parsed = JSON.parse(jsonMatch[0]); } catch (e) { parsed = null; }
+                }
+            }
+
+            if (!parsed) {
+                return escapeHtml(content).replace(/\n/g, '<br>');
+            }
+
+            if (Array.isArray(parsed)) {
+                const items = parsed.map(i => `<li>${escapeHtml(String(i))}</li>`).join('');
+                return `<ul>${items}</ul>`;
+            }
+
+            let html = '';
+
+            if (parsed.questions && Array.isArray(parsed.questions)) {
+                html += `<div class="assistant-section"><strong>Suggested Questions:</strong><ul>`;
+                for (const q of parsed.questions) html += `<li>${escapeHtml(q)}</li>`;
+                html += `</ul>`;
+                if (parsed.explanation) html += `<div class="assistant-note">${escapeHtml(parsed.explanation)}</div>`;
+                html += `</div>`;
+            }
+
+            if (parsed.negotiation_points && Array.isArray(parsed.negotiation_points)) {
+                html += `<div class="assistant-section"><strong>Negotiation Points:</strong><ol>`;
+                for (const p of parsed.negotiation_points) {
+                    html += `<li><strong>${escapeHtml(p.point || '')}</strong><div class="assistant-sub">${escapeHtml(p.rationale || '')}</div>`;
+                    if (p.suggested_text) html += `<pre class="assistant-suggest">${escapeHtml(p.suggested_text)}</pre>`;
+                    html += `</li>`;
+                }
+                html += `</ol>`;
+                if (parsed.summary) html += `<div class="assistant-note">${escapeHtml(parsed.summary)}</div>`;
+                html += `</div>`;
+            }
+
+            if (parsed.subject || parsed.body) {
+                html += `<div class="assistant-section"><strong>Generated Email:</strong>`;
+                if (parsed.subject) html += `<div class="assistant-sub"><strong>Subject:</strong> ${escapeHtml(parsed.subject)}</div>`;
+                if (parsed.body) html += `<pre class="assistant-suggest">${escapeHtml(parsed.body)}</pre>`;
+                if (parsed.notes) html += `<div class="assistant-note">${escapeHtml(parsed.notes)}</div>`;
+                html += `</div>`;
+            }
+
+            const knownKeys = new Set(['questions','explanation','negotiation_points','summary','subject','body','notes']);
+            const remaining = {};
+            for (const k of Object.keys(parsed)) {
+                if (!knownKeys.has(k)) remaining[k] = parsed[k];
+            }
+            if (Object.keys(remaining).length > 0) {
+                html += `<div class="assistant-section"><strong>Details:</strong><pre class="assistant-suggest">${escapeHtml(JSON.stringify(remaining, null, 2))}</pre></div>`;
+            }
+
+            return html || escapeHtml(JSON.stringify(parsed, null, 2));
+        }
+
+        function clearChat() {
+            console.log('[chat] Clearing chat...');
+            window._chatHistory = [];
+            sessionStorage.removeItem('chat_history'); // Clear saved history too
+            renderChat();
+            
+            // Restart conversation after a short delay
+            setTimeout(() => {
+                if (!isStarting) {
+                    console.log('[chat] Restarting after clear...');
+                    autoStarted = true;
+                    startNegotiationChat();
+                }
+            }, 300);
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
 </body>
 </html>

@@ -29,7 +29,7 @@ Then visit `http://localhost:8000`
 ## Configuration
 
 Edit `script.js` to change:
-- `API_URL`: Backend API endpoint (default: `http://localhost:5000`)
+- `API_URL`: Backend API endpoint (default: `http://localhost:3000`)
 
 ## Files
 
