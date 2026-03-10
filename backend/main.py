@@ -124,10 +124,10 @@ async def upload_contract(file: UploadFile = File(...)):
         "vehicle_data": vehicle_data,
         "recall_data": recall_data,
         "sla_data": final_sla,
+        "safety_rating": safety_rating,
         "risk_assessment": risk_assessment,
         "ai_advice": ai_advice,
         "contract_summary": contract_summary,
-        "safety_rating": safety_rating,
         "fairness_score": fairness_score,
         "preview": extracted_text[:500],
     }
